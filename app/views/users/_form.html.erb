@@ -1,0 +1,87 @@
+<%= form_for(user) do |f| %>
+  <% if user.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(user.errors.count, "error") %> prohibited this user from being saved:</h2>
+
+      <ul>
+      <% user.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :token %>
+    <%= f.text_field :token %>
+  </div>
+
+  <div class="field">
+    <%= f.label :name %>
+    <%= f.text_field :name %>
+  </div>
+
+  <div class="field">
+    <%= f.label :username %>
+    <%= f.text_field :username %>
+  </div>
+
+  <div class="field">
+    <%= f.label :email %>
+    <%= f.text_field :email %>
+  </div>
+
+  <div class="field">
+    <%= f.label :password %>
+    <%= f.text_field :password %>
+  </div>
+
+  <div class="field">
+    <%= f.label :credly %>
+    <%= f.text_area :credly %>
+  </div>
+
+  <div class="field">
+    <%= f.label :last_login %>
+    <%= f.datetime_select :last_login %>
+  </div>
+
+  <div class="field">
+    <%= f.label :remember_token %>
+    <%= f.text_area :remember_token %>
+  </div>
+
+  <div class="field">
+    <%= f.label :tos %>
+    <%= f.number_field :tos %>
+  </div>
+
+  <div class="field">
+    <%= f.label :created_at %>
+    <%= f.datetime_select :created_at %>
+  </div>
+
+  <div class="field">
+    <%= f.label :updated_at %>
+    <%= f.datetime_select :updated_at %>
+  </div>
+
+  <div class="field">
+    <%= f.label :verified_at %>
+    <%= f.datetime_select :verified_at %>
+  </div>
+
+  <div class="field">
+    <%= f.label :verified_by %>
+    <%= f.number_field :verified_by %>
+  </div>
+
+  <div class="field">
+    <%= f.label :default_group %>
+    <%= f.number_field :default_group %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>
