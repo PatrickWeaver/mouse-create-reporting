@@ -1,14 +1,26 @@
 //= require jquery
 //= require jquery_ujs
-//= require turbolinks
+// require turbolinks
 //= require d3.v4.min
 //= require chart.2.5.0
 //= require_tree .
 
+$( function() {
+  $( ".datepicker" ).datepicker({
+      showOtherMonths: true,
+      selectOtherMonths: true,
+      changeMonth: true,
+      changeYear: true
+    });
+} );
+
+
+
 $.ajax({
            type: "GET",
            contentType: "application/json; charset=utf-8",
-           url: '/profiles.json',
+           //url: '/profiles.json',
+           url: '',
            dataType: 'json',
            success: function (data) {
                draw(data);
