@@ -1,5 +1,50 @@
 class ReportsController < ApplicationController
 
+  def index
+    @breakdown = params[:breakdown]
+    @scope = params[:scope]
+    case @breakdown
+    when "platform"
+      selected_users = User.includes(:profile).all
+    when "site"
+      if @scope
+        selected_users = User.includes(:profile)
+        @sites = Site.where( "id" => @scope)
+      else
+        selected_users = User.includes(:profile).all
+        @sites = Site.all
+      end
+
+      sites_data = Hash.new
+      for site in @sites do
+        sites_data[site.id] = Hash.new
+        sites_data[site.id]["name"] = site.name
+        sites_data[site.id]["id"] = site.id
+        sites_data[site.id]["EdCode"] = site.code
+        sites_data[site.id]["UserCount"] = 0
+      end
+
+      for user in selected_users do
+          site_users = SiteUser.where('user' => user.id)
+          for site in site_users do
+            puts "****"
+            puts site.inspect
+            puts "****"
+            if sites_data[site.site_id]
+              sites_data[site.site_id]["UserCount"] += 1
+            end
+        end
+      end
+
+      @data = sites_data
+
+    else
+      selected_users = User.includes(:profile).all
+
+    end
+    #@data = "data"
+  end
+
   def accounts
     if params
       @users = User.includes(:profile).where("profiles.ethnicity_id" => params[:ethnicity].to_i)
@@ -9,7 +54,7 @@ class ReportsController < ApplicationController
   end
 
   def ethnicity
-    if params[:breakdown] == "account"
+    if params[:breakdown] == "platform"
       if params[:gender]
         gender = params[:gender]
         selected_users = User.includes(:profile).where("profiles.gender" => gender)
@@ -43,7 +88,6 @@ class ReportsController < ApplicationController
 
       @ethnicities = ethnicities
       @gender = gender
-
     end
   end
 

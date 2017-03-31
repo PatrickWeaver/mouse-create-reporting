@@ -59,6 +59,22 @@ ActiveRecord::Schema.define(version: 20170323212347) do
     t.index ["curriculum_id"], name: "curriculum_projects_curriculum_id_foreign", using: :btree
   end
 
+  create_table "evidence", unsigned: true, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci" do |t|
+    t.integer  "group_id",                                 null: false, unsigned: true
+    t.integer  "project_id",                               null: false, unsigned: true
+    t.integer  "user_id",                                  null: false, unsigned: true
+    t.string   "status",       limit: 9, default: "saved", null: false
+    t.datetime "submitted_at"
+    t.boolean  "reviewed",               default: false,   null: false
+    t.datetime "reviewed_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.datetime "deleted_at"
+    t.index ["group_id"], name: "evidence_group_id_foreign", using: :btree
+    t.index ["project_id"], name: "evidence_project_id_foreign", using: :btree
+    t.index ["user_id"], name: "evidence_user_id_foreign", using: :btree
+  end
+
   create_table "evidence_asset", unsigned: true, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci" do |t|
     t.integer  "type_id",                               null: false, unsigned: true
     t.integer  "evidence_id",                           null: false, unsigned: true
@@ -97,6 +113,17 @@ ActiveRecord::Schema.define(version: 20170323212347) do
     t.datetime "updated_at"
     t.index ["group_id"], name: "group_project_group_id_foreign", using: :btree
     t.index ["project_id"], name: "group_project_project_id_foreign", using: :btree
+  end
+
+  create_table "group_user", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci" do |t|
+    t.integer  "user_id",               null: false, unsigned: true
+    t.integer  "group_id",              null: false, unsigned: true
+    t.string   "status",                null: false
+    t.string   "code",       limit: 30
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.index ["group_id"], name: "group_user_group_id_foreign", using: :btree
+    t.index ["user_id"], name: "group_user_user_id_foreign", using: :btree
   end
 
   create_table "groups", unsigned: true, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci" do |t|
@@ -175,6 +202,21 @@ ActiveRecord::Schema.define(version: 20170323212347) do
     t.datetime "updated_at"
   end
 
+  create_table "profiles", unsigned: true, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci" do |t|
+    t.integer  "user_id",                  null: false, unsigned: true
+    t.string   "first_name",               null: false
+    t.string   "last_name",                null: false
+    t.string   "avatar",                   null: false
+    t.date     "birth_date",               null: false
+    t.integer  "ethnicity_id",                          unsigned: true
+    t.string   "phone",        limit: 25
+    t.string   "gender",       limit: 6,   null: false
+    t.string   "bio",          limit: 140
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.index ["user_id"], name: "profiles_user_id_foreign", using: :btree
+  end
+
   create_table "projects", id: :integer, unsigned: true, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci" do |t|
     t.string   "title",                    null: false
     t.string   "teaser",     limit: 200,   null: false
@@ -183,6 +225,12 @@ ActiveRecord::Schema.define(version: 20170323212347) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.datetime "deleted_at"
+  end
+
+  create_table "role_user", primary_key: ["role_id", "user_id"], force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci" do |t|
+    t.integer "role_id", null: false, unsigned: true
+    t.integer "user_id", null: false, unsigned: true
+    t.index ["user_id"], name: "role_user_user_id_foreign", using: :btree
   end
 
   create_table "roles", unsigned: true, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci" do |t|
@@ -267,15 +315,23 @@ ActiveRecord::Schema.define(version: 20170323212347) do
   end
 
   add_foreign_key "curriculum_projects", "curricula", column: "curriculum_id", name: "curriculum_projects_curriculum_id_foreign", on_delete: :cascade
+  add_foreign_key "evidence", "groups", name: "evidence_group_id_foreign"
+  add_foreign_key "evidence", "projects", name: "evidence_project_id_foreign"
+  add_foreign_key "evidence", "users", name: "evidence_user_id_foreign"
   add_foreign_key "evidence_asset", "evidence", name: "evidence_asset_evidence_id_foreign"
   add_foreign_key "evidence_asset", "evidence_type", column: "type_id", name: "evidence_asset_type_id_foreign"
   add_foreign_key "group_project", "groups", name: "group_project_group_id_foreign", on_delete: :cascade
   add_foreign_key "group_project", "projects", name: "group_project_project_id_foreign", on_delete: :cascade
+  add_foreign_key "group_user", "groups", name: "group_user_group_id_foreign", on_delete: :cascade
+  add_foreign_key "group_user", "users", name: "group_user_user_id_foreign", on_delete: :cascade
   add_foreign_key "license_site", "licenses", name: "license_site_license_id_foreign", on_delete: :cascade
   add_foreign_key "license_site", "sites", name: "license_site_site_id_foreign", on_delete: :cascade
   add_foreign_key "network_site", "networks", name: "network_site_network_id_foreign", on_delete: :cascade
   add_foreign_key "network_site", "sites", name: "network_site_site_id_foreign", on_delete: :cascade
   add_foreign_key "permission_role", "permissions", name: "permission_role_permission_id_foreign", on_delete: :cascade
   add_foreign_key "permission_role", "roles", name: "permission_role_role_id_foreign", on_delete: :cascade
+  add_foreign_key "profiles", "users", name: "profiles_user_id_foreign"
+  add_foreign_key "role_user", "roles", name: "role_user_role_id_foreign", on_delete: :cascade
+  add_foreign_key "role_user", "users", name: "role_user_user_id_foreign", on_delete: :cascade
   add_foreign_key "schools", "school_type", column: "type_id", name: "schools_type_id_foreign"
 end

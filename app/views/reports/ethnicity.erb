@@ -3,21 +3,55 @@
 <h2>By Gender</h2>
 <%= @gender %>
 
-<h3>American Indian or Alaska Native</h3>
-<%= @ethnicities[1][0] %> -- <%= @ethnicities[1][1] %> %
-<h3>Asian</h3>
-<%= @ethnicities[2][0] %> -- <%= @ethnicities[2][1] %> %
-<h3>Black or African American</h3>
-<%= @ethnicities[3][0] %> -- <%= @ethnicities[3][1] %> %
-<h3>Hispanic, Latino/a, or Spanish Origin</h3>
-<%= @ethnicities[4][0] %> -- <%= @ethnicities[4][1] %> %
-<h3>Middle Eastern or North African</h3>
-<%= @ethnicities[9][0] %> -- <%= @ethnicities[9][1] %> %
-<h3>Native Hawaiian or Other Pacific Islander</h3>
-<%= @ethnicities[5][0] %> -- <%= @ethnicities[5][1] %> %
-<h3>White</h3>
-<%= @ethnicities[6][0] %> -- <%= @ethnicities[6][1] %> %
-<h3>Two or More Races</h3>
-<%= @ethnicities[7][0] %> -- <%= @ethnicities[7][1] %> %
-<h3>Decline to Answer</h3>
-<%= @ethnicities[8][0] %> -- <%= @ethnicities[8][1] %> %
+<table>
+  <tr>
+    <th>Ethnicity</th>
+    <th>Number of Accounts</th>
+    <th>Percent of Accounts</th>
+  </tr>
+  <tr>
+    <td>American Indian or Alaska Native</td>
+    <td><%= @ethnicities[1][0] %></td>
+    <td><%= @ethnicities[1][1] %> %</td>
+  </tr>
+  <tr>
+    <td>Asian</td>
+    <td><%= @ethnicities[2][0] %></td>
+    <td><%= @ethnicities[2][1] %> %</td>
+  </tr>
+  <tr>
+    <td>Black or African American</td>
+    <td><%= @ethnicities[3][0] %></td>
+    <td><%= @ethnicities[3][1] %> %</td>
+  </tr>
+  <tr>
+    <td>Hispanic, Latino/a, or Spanish Origin</td>
+    <td><%= @ethnicities[4][0] %></td>
+    <td><%= @ethnicities[4][1] %> %</td>
+  </tr>
+  <tr>
+    <td>Middle Eastern or North African</td>
+    <td><%= @ethnicities[9][0] %></td>
+    <td><%= @ethnicities[9][1] %> %</td>
+  </tr>
+  <tr>
+    <td>Native Hawaiian or Other Pacific Islander</td>
+    <td><%= @ethnicities[5][0] %></td>
+    <td><%= @ethnicities[5][1] %> %</td>
+  </tr>
+  <tr>
+    <td>White</td>
+    <td><%= @ethnicities[6][0] %></td>
+    <td><%= @ethnicities[6][1] %> %</td>
+  </tr>
+  <tr>
+    <td>Two or More Races</td>
+    <td><%= @ethnicities[7][0] %></td>
+    <td><%= @ethnicities[7][1] %> %</td>
+  </tr>
+  <tr>
+    <td>Decline to Answer</td>
+    <td><%= @ethnicities[8][0] %></td>
+    <td><%= @ethnicities[8][1] %> %</td>
+  </tr>
+</table>

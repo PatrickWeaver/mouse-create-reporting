@@ -1,0 +1,34 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @site.name %>
+</p>
+
+<p>
+  <strong>Label:</strong>
+  <%= @site.label %>
+</p>
+
+<p>
+  <strong>Code:</strong>
+  <%= @site.code %>
+</p>
+
+<p>
+  <strong>Created by:</strong>
+  <%= @site.created_by %>
+</p>
+
+<p>
+  <strong>Created at:</strong>
+  <%= @site.created_at %>
+</p>
+
+<p>
+  <strong>Updated at:</strong>
+  <%= @site.updated_at %>
+</p>
+
+<%= link_to 'Edit', edit_site_path(@site) %> |
+<%= link_to 'Back', sites_path %>

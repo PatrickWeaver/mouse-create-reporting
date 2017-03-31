@@ -1,0 +1,31 @@
+<h1>Reports</h1>
+
+<h2>Data broken down by <%= @breakdown %></h2>
+
+<% if @scope %>
+  <h3>Site: <%= @scope %> -- <%= @sites[0].name %></h3>
+<% end %>
+
+
+<table>
+  <tr>
+    <th>Id</th>
+    <th>Name</th>
+    <th>Educator Code</th>
+    <th>User Count</th>
+  </tr>
+  <% @data.each do |site| %>
+  <tr>
+    <td><%= site[1]['id'] %></td>
+    <td><%= site[1]['name'] %></td>
+    <td><%= site[1]['EdCode'] %></td>
+    <td><%= site[1]['UserCount'] %></td>
+  </tr>
+
+
+  <% end %>
+</table>
+
+
+
+<%= @data %>
