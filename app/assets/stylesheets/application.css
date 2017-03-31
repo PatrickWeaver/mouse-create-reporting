@@ -13,7 +13,9 @@
  *= require_tree .
  *= require_self
  */
-
+.hide {
+  display: none;
+}
 
 .chart {
   max-width: 100%;
@@ -25,4 +27,18 @@
 .multi-select {
   overflow-y: scroll;
   min-height: 200px;
+}
+
+th {
+  padding: 5px;
+  background-color: #AFAFAF;
+}
+
+td {
+  padding: 3px;
+  background-color: #EFEFEF;
+}
+
+td.number, td.percent{
+  text-align: right;
 }

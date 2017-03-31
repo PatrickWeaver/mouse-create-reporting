@@ -12,20 +12,52 @@
     <th>Id</th>
     <th>Name</th>
     <th>Educator Code</th>
-    <th>User Count</th>
+    <th>Accounts</th>
+    <th>Educators</th>
+    <th>Students</th>
+    <th>General Users</th>
+    <th>Girls</th>
+    <th>Boys</th>
+    <th>Other Gender</th>
   </tr>
   <% @data.each do |site| %>
   <tr>
-    <td><%= site[1]['id'] %></td>
+    <td class="number"><%= site[1]['id'] %></td>
     <td><%= site[1]['name'] %></td>
-    <td><%= site[1]['EdCode'] %></td>
-    <td><%= site[1]['UserCount'] %></td>
+    <td><%= site[1]['Educator Code'] %></td>
+    <td class="number"><%= site[1]['Accounts'] %></td>
+    <% if site[1]['Accounts'] != 0 %>
+      <td class="number"><%= site[1]['Educators'] %></td>
+      <td class="percent hide"><%= (100.00 * site[1]['Educators'] / site[1]['Accounts']).round(2) %>%</td>
+      <td class="number"><%= site[1]['Students'] %></td>
+      <td class="percent hide"><%= (100.00 * site[1]['Students'] / site[1]['Accounts']).round(2) %>%</td>
+      <td class="number"><%= site[1]['General Users'] %></td>
+      <td class="percent hide"><%= (100.00 * site[1]['General Users'] / site[1]['Accounts']).round(2) %>%</td>
+    <% else %>
+      <td class="number"><%= site[1]['Educators'] %></td>
+      <td class="percent hide">0%</td>
+      <td class="number"><%= site[1]['Students'] %></td>
+      <td class="percent hide">0%</td>
+      <td class="number"><%= site[1]['General Users'] %></td>
+      <td class="percent hide">0%</td>
+    <% end %>
+    <% if site[1]['Students'] != 0 %>
+      <td class="number"><%= site[1]['Girls'] %></td>
+      <td class="percent hide"><%= (100.00 * site[1]['Girls'] / site[1]['Students']).round(2) %>%</td>
+      <td class="number"><%= site[1]['Boys'] %></td>
+      <td class="percent hide"><%= (100.00 * site[1]['Boys'] / site[1]['Students']).round(2) %>%</td>
+      <td class="number"><%= site[1]['Other Gender'] %></td>
+      <td class="percent hide"><%= (100.00 * site[1]['Other Gender'] / site[1]['Students']).round(2) %>%</td>
+    <% else %>
+      <td class="number"><%= site[1]['Educators'] %></td>
+      <td class="percent hide">0%</td>
+      <td class="number"><%= site[1]['Students'] %></td>
+      <td class="percent hide">0%</td>
+      <td class="number"><%= site[1]['General Users'] %></td>
+      <td class="percent hide">0%</td>
+    <% end %>
   </tr>
 
 
   <% end %>
 </table>
-
-
-
-<%= @data %>

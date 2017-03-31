@@ -5,34 +5,61 @@ class ReportsController < ApplicationController
     @scope = params[:scope]
     case @breakdown
     when "platform"
-      selected_users = User.includes(:profile).all
+      selected_users = User.includes(:profile, :role, :sites).all
     when "site"
       if @scope
-        selected_users = User.includes(:profile)
+        selected_users = User.includes(:profile, :role, :sites)
         @sites = Site.where( "id" => @scope)
       else
-        selected_users = User.includes(:profile).all
+        selected_users = User.includes(:profile, :role, :sites).all
         @sites = Site.all
       end
 
       sites_data = Hash.new
       for site in @sites do
         sites_data[site.id] = Hash.new
-        sites_data[site.id]["name"] = site.name
-        sites_data[site.id]["id"] = site.id
-        sites_data[site.id]["EdCode"] = site.code
-        sites_data[site.id]["UserCount"] = 0
+        site_hash = sites_data[site.id]
+        site_hash["name"] = site.name
+        site_hash["id"] = site.id
+        site_hash["Educator Code"] = site.code
+        site_hash["Accounts"] = 0
+        site_hash["Students"] = 0
+        site_hash["Educators"] = 0
+        site_hash["General Users"] = 0
+        site_hash["Girls"] = 0
+        site_hash["Boys"] = 0
+        site_hash["Other Gender"] = 0
       end
 
       for user in selected_users do
-          site_users = SiteUser.where('user' => user.id)
-          for site in site_users do
+        #if user.id % 70 == 0
+          for site in user.sites do
             puts "****"
-            puts site.inspect
+            puts user
+            puts user.sites
             puts "****"
-            if sites_data[site.site_id]
-              sites_data[site.site_id]["UserCount"] += 1
+            if sites_data[site.id]
+              site_hash = sites_data[site.id]
+              site_hash["Accounts"] += 1
+              case user.role.name
+              when "educator"
+                site_hash["Educators"] += 1
+              when "student"
+                site_hash["Students"] += 1
+                case user.profile.gender
+                when "female"
+                  site_hash["Girls"] += 1
+                when "male"
+                  site_hash["Boys"] += 1
+                else
+                  site_hash["Other Gender"] += 1
+                end
+              when "general"
+                site_hash["General Users"] += 1
+              else
+              end
             end
+          #end
         end
       end
 

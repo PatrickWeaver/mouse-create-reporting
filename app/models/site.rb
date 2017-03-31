@@ -1,3 +1,4 @@
 class Site < ApplicationRecord
-  has_many :users, through: :site_users
+  has_many :site_user
+  has_many :users, through: :site_user
 end
