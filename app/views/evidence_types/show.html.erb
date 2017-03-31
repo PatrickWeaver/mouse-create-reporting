@@ -1,0 +1,39 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @evidence_type.name %>
+</p>
+
+<p>
+  <strong>Active:</strong>
+  <%= @evidence_type.active %>
+</p>
+
+<p>
+  <strong>Icon:</strong>
+  <%= @evidence_type.icon %>
+</p>
+
+<p>
+  <strong>Validation:</strong>
+  <%= @evidence_type.validation %>
+</p>
+
+<p>
+  <strong>Messages:</strong>
+  <%= @evidence_type.messages %>
+</p>
+
+<p>
+  <strong>Created at:</strong>
+  <%= @evidence_type.created_at %>
+</p>
+
+<p>
+  <strong>Updated at:</strong>
+  <%= @evidence_type.updated_at %>
+</p>
+
+<%= link_to 'Edit', edit_evidence_type_path(@evidence_type) %> |
+<%= link_to 'Back', evidence_types_path %>

@@ -1,0 +1,59 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Group:</strong>
+  <%= @evidence.group_id %>
+</p>
+
+<p>
+  <strong>Project:</strong>
+  <%= @evidence.project_id %>
+</p>
+
+<p>
+  <strong>User:</strong>
+  <%= @evidence.user_id %>
+</p>
+
+<p>
+  <strong>Status:</strong>
+  <%= @evidence.status %>
+</p>
+
+<p>
+  <strong>Submitted at:</strong>
+  <%= @evidence.submitted_at %>
+</p>
+
+<p>
+  <strong>Reviewed:</strong>
+  <%= @evidence.reviewed %>
+</p>
+
+<p>
+  <strong>Reviewed at:</strong>
+  <%= @evidence.reviewed_at %>
+</p>
+
+<p>
+  <strong>Created at:</strong>
+  <%= @evidence.created_at %>
+</p>
+
+<p>
+  <strong>Created at:</strong>
+  <%= @evidence.created_at %>
+</p>
+
+<p>
+  <strong>Updated at:</strong>
+  <%= @evidence.updated_at %>
+</p>
+
+<p>
+  <strong>Deleted at:</strong>
+  <%= @evidence.deleted_at %>
+</p>
+
+<%= link_to 'Edit', edit_evidence_path(@evidence) %> |
+<%= link_to 'Back', evidences_path %>

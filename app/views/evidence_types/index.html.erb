@@ -1,0 +1,39 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Evidence Types</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Active</th>
+      <th>Icon</th>
+      <th>Validation</th>
+      <th>Messages</th>
+      <th>Created at</th>
+      <th>Updated at</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @evidence_types.each do |evidence_type| %>
+      <tr>
+        <td><%= evidence_type.name %></td>
+        <td><%= evidence_type.active %></td>
+        <td><%= evidence_type.icon %></td>
+        <td><%= evidence_type.validation %></td>
+        <td><%= evidence_type.messages %></td>
+        <td><%= evidence_type.created_at %></td>
+        <td><%= evidence_type.updated_at %></td>
+        <td><%= link_to 'Show', evidence_type %></td>
+        <td><%= link_to 'Edit', edit_evidence_type_path(evidence_type) %></td>
+        <td><%= link_to 'Destroy', evidence_type, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Evidence Type', new_evidence_type_path %>

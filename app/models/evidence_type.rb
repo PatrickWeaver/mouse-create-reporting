@@ -1,0 +1,2 @@
+class EvidenceType < ApplicationRecord
+end

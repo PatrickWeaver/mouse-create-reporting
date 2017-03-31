@@ -1,0 +1,24 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Evidence:</strong>
+  <%= @evidence_user.evidence_id %>
+</p>
+
+<p>
+  <strong>User:</strong>
+  <%= @evidence_user.user_id %>
+</p>
+
+<p>
+  <strong>Created at:</strong>
+  <%= @evidence_user.created_at %>
+</p>
+
+<p>
+  <strong>Updated at:</strong>
+  <%= @evidence_user.updated_at %>
+</p>
+
+<%= link_to 'Edit', edit_evidence_user_path(@evidence_user) %> |
+<%= link_to 'Back', evidence_users_path %>

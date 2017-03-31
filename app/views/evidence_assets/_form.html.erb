@@ -1,0 +1,57 @@
+<%= form_for(evidence_asset) do |f| %>
+  <% if evidence_asset.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(evidence_asset.errors.count, "error") %> prohibited this evidence_asset from being saved:</h2>
+
+      <ul>
+      <% evidence_asset.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :type_id %>
+    <%= f.number_field :type_id %>
+  </div>
+
+  <div class="field">
+    <%= f.label :evidence_id %>
+    <%= f.number_field :evidence_id %>
+  </div>
+
+  <div class="field">
+    <%= f.label :step_id %>
+    <%= f.number_field :step_id %>
+  </div>
+
+  <div class="field">
+    <%= f.label :step_order %>
+    <%= f.number_field :step_order %>
+  </div>
+
+  <div class="field">
+    <%= f.label :order %>
+    <%= f.number_field :order %>
+  </div>
+
+  <div class="field">
+    <%= f.label :content %>
+    <%= f.text_area :content %>
+  </div>
+
+  <div class="field">
+    <%= f.label :created_at %>
+    <%= f.datetime_select :created_at %>
+  </div>
+
+  <div class="field">
+    <%= f.label :updated_at %>
+    <%= f.datetime_select :updated_at %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

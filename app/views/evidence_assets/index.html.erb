@@ -1,0 +1,41 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Evidence Assets</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Evidence</th>
+      <th>Step</th>
+      <th>Step order</th>
+      <th>Order</th>
+      <th>Content</th>
+      <th>Created at</th>
+      <th>Updated at</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @evidence_assets.each do |evidence_asset| %>
+      <tr>
+        <td><%= evidence_asset.type_id %></td>
+        <td><%= evidence_asset.evidence_id %></td>
+        <td><%= evidence_asset.step_id %></td>
+        <td><%= evidence_asset.step_order %></td>
+        <td><%= evidence_asset.order %></td>
+        <td><%= evidence_asset.content %></td>
+        <td><%= evidence_asset.created_at %></td>
+        <td><%= evidence_asset.updated_at %></td>
+        <td><%= link_to 'Show', evidence_asset %></td>
+        <td><%= link_to 'Edit', edit_evidence_asset_path(evidence_asset) %></td>
+        <td><%= link_to 'Destroy', evidence_asset, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Evidence Asset', new_evidence_asset_path %>

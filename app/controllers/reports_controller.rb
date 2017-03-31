@@ -29,15 +29,15 @@ class ReportsController < ApplicationController
         site_hash["Girls"] = 0
         site_hash["Boys"] = 0
         site_hash["Other Gender"] = 0
+        site_hash["Evidence Records"] = 0
+        site_hash["Evidence Records Saved"] = 0
+        site_hash["Evidence Records Submitted"] = 0
+        site_hash["Collaborators"] = 0
       end
 
       for user in selected_users do
         #if user.id % 70 == 0
           for site in user.sites do
-            puts "****"
-            puts user
-            puts user.sites
-            puts "****"
             if sites_data[site.id]
               site_hash = sites_data[site.id]
               site_hash["Accounts"] += 1
@@ -60,6 +60,26 @@ class ReportsController < ApplicationController
               end
             end
           #end
+        end
+        for evidence in user.evidence do
+          site = evidence.group.site
+          if site
+            site_hash = sites_data[site.id]
+            site_hash["Evidence Records"] += 1
+            if evidence.status == "saved"
+              site_hash["Evidence Records Saved"] += 1
+            elsif evidence.status == "submitted"
+              site_hash["Evidence Records Submitted"] += 1
+            else
+            end
+
+            if evidence.status == "submitted"
+              site_hash["Collaborators"] += 1
+              for collaboration in evidence.collaborations do
+                site_hash["Collaborators"] += 1
+              end
+            end
+          end
         end
       end
 

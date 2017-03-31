@@ -1,0 +1,49 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Site:</strong>
+  <%= @group.site_id %>
+</p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @group.name %>
+</p>
+
+<p>
+  <strong>Label:</strong>
+  <%= @group.label %>
+</p>
+
+<p>
+  <strong>Code:</strong>
+  <%= @group.code %>
+</p>
+
+<p>
+  <strong>Tos:</strong>
+  <%= @group.tos %>
+</p>
+
+<p>
+  <strong>Created by:</strong>
+  <%= @group.created_by %>
+</p>
+
+<p>
+  <strong>Created at:</strong>
+  <%= @group.created_at %>
+</p>
+
+<p>
+  <strong>Updated at:</strong>
+  <%= @group.updated_at %>
+</p>
+
+<p>
+  <strong>Deleted at:</strong>
+  <%= @group.deleted_at %>
+</p>
+
+<%= link_to 'Edit', edit_group_path(@group) %> |
+<%= link_to 'Back', groups_path %>

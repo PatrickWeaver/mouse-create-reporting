@@ -1,0 +1,72 @@
+<%= form_for(evidence) do |f| %>
+  <% if evidence.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(evidence.errors.count, "error") %> prohibited this evidence from being saved:</h2>
+
+      <ul>
+      <% evidence.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :group_id %>
+    <%= f.number_field :group_id %>
+  </div>
+
+  <div class="field">
+    <%= f.label :project_id %>
+    <%= f.number_field :project_id %>
+  </div>
+
+  <div class="field">
+    <%= f.label :user_id %>
+    <%= f.number_field :user_id %>
+  </div>
+
+  <div class="field">
+    <%= f.label :status %>
+    <%= f.text_field :status %>
+  </div>
+
+  <div class="field">
+    <%= f.label :submitted_at %>
+    <%= f.datetime_select :submitted_at %>
+  </div>
+
+  <div class="field">
+    <%= f.label :reviewed %>
+    <%= f.number_field :reviewed %>
+  </div>
+
+  <div class="field">
+    <%= f.label :reviewed_at %>
+    <%= f.datetime_select :reviewed_at %>
+  </div>
+
+  <div class="field">
+    <%= f.label :created_at %>
+    <%= f.datetime_select :created_at %>
+  </div>
+
+  <div class="field">
+    <%= f.label :created_at %>
+    <%= f.datetime_select :created_at %>
+  </div>
+
+  <div class="field">
+    <%= f.label :updated_at %>
+    <%= f.datetime_select :updated_at %>
+  </div>
+
+  <div class="field">
+    <%= f.label :deleted_at %>
+    <%= f.datetime_select :deleted_at %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

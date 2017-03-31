@@ -19,6 +19,10 @@
     <th>Girls</th>
     <th>Boys</th>
     <th>Other Gender</th>
+    <th>Evidence Records</th>
+    <th>Evidence Records Saved</th>
+    <th>Evidence Records Submitted</th>
+    <th>Average Collaborators</th>
   </tr>
   <% @data.each do |site| %>
   <tr>
@@ -55,6 +59,14 @@
       <td class="percent hide">0%</td>
       <td class="number"><%= site[1]['General Users'] %></td>
       <td class="percent hide">0%</td>
+    <% end %>
+    <td class="number"><%= site[1]['Evidence Records'] %>
+    <td class="number"><%= site[1]['Evidence Records Saved'] %>
+    <td class="number"><%= site[1]['Evidence Records Submitted'] %>
+    <% if site[1]['Evidence Records Submitted'] != 0 %>
+      <td class="number"><%= (1.0 * site[1]['Collaborators'] / site[1]['Evidence Records Submitted']).round(2) %></td>
+    <% else %>
+      <td class="number">0</td>
     <% end %>
   </tr>
 

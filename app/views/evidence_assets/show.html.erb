@@ -1,0 +1,44 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Type:</strong>
+  <%= @evidence_asset.type_id %>
+</p>
+
+<p>
+  <strong>Evidence:</strong>
+  <%= @evidence_asset.evidence_id %>
+</p>
+
+<p>
+  <strong>Step:</strong>
+  <%= @evidence_asset.step_id %>
+</p>
+
+<p>
+  <strong>Step order:</strong>
+  <%= @evidence_asset.step_order %>
+</p>
+
+<p>
+  <strong>Order:</strong>
+  <%= @evidence_asset.order %>
+</p>
+
+<p>
+  <strong>Content:</strong>
+  <%= @evidence_asset.content %>
+</p>
+
+<p>
+  <strong>Created at:</strong>
+  <%= @evidence_asset.created_at %>
+</p>
+
+<p>
+  <strong>Updated at:</strong>
+  <%= @evidence_asset.updated_at %>
+</p>
+
+<%= link_to 'Edit', edit_evidence_asset_path(@evidence_asset) %> |
+<%= link_to 'Back', evidence_assets_path %>

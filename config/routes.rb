@@ -1,4 +1,10 @@
 Rails.application.routes.draw do
+  resources :group_users
+  resources :groups
+  resources :evidence_types
+  resources :evidence_assets
+  resources :evidence_users
+  resources :evidences
   resources :role_users
   resources :roles
   resources :site_users

@@ -1,0 +1,47 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Evidences</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Group</th>
+      <th>Project</th>
+      <th>User</th>
+      <th>Status</th>
+      <th>Submitted at</th>
+      <th>Reviewed</th>
+      <th>Reviewed at</th>
+      <th>Created at</th>
+      <th>Created at</th>
+      <th>Updated at</th>
+      <th>Deleted at</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @evidences.each do |evidence| %>
+      <tr>
+        <td><%= evidence.group_id %></td>
+        <td><%= evidence.project_id %></td>
+        <td><%= evidence.user_id %></td>
+        <td><%= evidence.status %></td>
+        <td><%= evidence.submitted_at %></td>
+        <td><%= evidence.reviewed %></td>
+        <td><%= evidence.reviewed_at %></td>
+        <td><%= evidence.created_at %></td>
+        <td><%= evidence.created_at %></td>
+        <td><%= evidence.updated_at %></td>
+        <td><%= evidence.deleted_at %></td>
+        <td><%= link_to 'Show', evidence %></td>
+        <td><%= link_to 'Edit', edit_evidence_path(evidence) %></td>
+        <td><%= link_to 'Destroy', evidence, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Evidence', new_evidence_path %>

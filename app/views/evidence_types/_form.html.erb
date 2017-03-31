@@ -1,0 +1,52 @@
+<%= form_for(evidence_type) do |f| %>
+  <% if evidence_type.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(evidence_type.errors.count, "error") %> prohibited this evidence_type from being saved:</h2>
+
+      <ul>
+      <% evidence_type.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :name %>
+    <%= f.text_field :name %>
+  </div>
+
+  <div class="field">
+    <%= f.label :active %>
+    <%= f.number_field :active %>
+  </div>
+
+  <div class="field">
+    <%= f.label :icon %>
+    <%= f.text_field :icon %>
+  </div>
+
+  <div class="field">
+    <%= f.label :validation %>
+    <%= f.text_area :validation %>
+  </div>
+
+  <div class="field">
+    <%= f.label :messages %>
+    <%= f.text_area :messages %>
+  </div>
+
+  <div class="field">
+    <%= f.label :created_at %>
+    <%= f.datetime_select :created_at %>
+  </div>
+
+  <div class="field">
+    <%= f.label :updated_at %>
+    <%= f.datetime_select :updated_at %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

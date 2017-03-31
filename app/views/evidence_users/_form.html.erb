@@ -1,0 +1,37 @@
+<%= form_for(evidence_user) do |f| %>
+  <% if evidence_user.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(evidence_user.errors.count, "error") %> prohibited this evidence_user from being saved:</h2>
+
+      <ul>
+      <% evidence_user.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :evidence_id %>
+    <%= f.number_field :evidence_id %>
+  </div>
+
+  <div class="field">
+    <%= f.label :user_id %>
+    <%= f.number_field :user_id %>
+  </div>
+
+  <div class="field">
+    <%= f.label :created_at %>
+    <%= f.datetime_select :created_at %>
+  </div>
+
+  <div class="field">
+    <%= f.label :updated_at %>
+    <%= f.datetime_select :updated_at %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

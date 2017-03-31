@@ -1,0 +1,33 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Evidence Users</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Evidence</th>
+      <th>User</th>
+      <th>Created at</th>
+      <th>Updated at</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @evidence_users.each do |evidence_user| %>
+      <tr>
+        <td><%= evidence_user.evidence_id %></td>
+        <td><%= evidence_user.user_id %></td>
+        <td><%= evidence_user.created_at %></td>
+        <td><%= evidence_user.updated_at %></td>
+        <td><%= link_to 'Show', evidence_user %></td>
+        <td><%= link_to 'Edit', edit_evidence_user_path(evidence_user) %></td>
+        <td><%= link_to 'Destroy', evidence_user, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Evidence User', new_evidence_user_path %>
