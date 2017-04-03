@@ -1,0 +1,39 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Networks</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Label</th>
+      <th>Code</th>
+      <th>Created by</th>
+      <th>Created at</th>
+      <th>Updated at</th>
+      <th>License</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @networks.each do |network| %>
+      <tr>
+        <td><%= network.name %></td>
+        <td><%= network.label %></td>
+        <td><%= network.code %></td>
+        <td><%= network.created_by %></td>
+        <td><%= network.created_at %></td>
+        <td><%= network.updated_at %></td>
+        <td><%= network.license_id %></td>
+        <td><%= link_to 'Show', network %></td>
+        <td><%= link_to 'Edit', edit_network_path(network) %></td>
+        <td><%= link_to 'Destroy', network, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Network', new_network_path %>

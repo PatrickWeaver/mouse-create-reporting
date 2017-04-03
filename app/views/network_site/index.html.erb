@@ -1,0 +1,25 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Network Sites</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Network</th>
+      <th>Site</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @network_sites.each do |network_site| %>
+      <tr>
+        <td><%= network_site.network_id %></td>
+        <td><%= network_site.site_id %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Network Site', new_network_site_path %>

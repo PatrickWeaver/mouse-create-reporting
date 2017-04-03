@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Group:</strong>
+  <%= @group_project.group_id %>
+</p>
+
+<p>
+  <strong>Project:</strong>
+  <%= @group_project.project_id %>
+</p>
+
+<p>
+  <strong>Order:</strong>
+  <%= @group_project.order %>
+</p>
+
+<p>
+  <strong>Created at:</strong>
+  <%= @group_project.created_at %>
+</p>
+
+<p>
+  <strong>Updated at:</strong>
+  <%= @group_project.updated_at %>
+</p>
+
+<%= link_to 'Edit', edit_group_project_path(@group_project) %> |
+<%= link_to 'Back', group_projects_path %>

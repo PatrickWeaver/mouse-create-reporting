@@ -1,4 +1,8 @@
 Rails.application.routes.draw do
+  resources :network_site
+  resources :networks
+  resources :group_projects
+  resources :projects
   resources :group_users
   resources :groups
   resources :evidence_types

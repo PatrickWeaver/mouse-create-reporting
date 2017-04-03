@@ -2,6 +2,32 @@
 
 <h2>Data broken down by <%= @breakdown %></h2>
 
-<% if @scope %>
+<% if @scope  == 'site' %>
   <h3>Site: <%= @scope %> -- <%= @sites[0].name %></h3>
 <% end %>
+<% if @scope  == 'network' %>
+  <h3>Site: <%= @scope %> -- <%= @network %></h3>
+<% end %>
+
+<table>
+  <tr>
+    <th>Site Name</th>
+    <th>Site ID</th>
+    <% for project in @project_titles %>
+      <th colspan="1">
+        <%= project[1] %>
+      </th>
+    <% end %>
+  </tr>
+  <% @data.each_with_index do |(id, projects), index| %>
+    <tr>
+      <td><%= @site_names[id] %></td>
+      <td><strong><%= id %></strong></td>
+      <% projects.each do |project| %>
+        <!--<td><%= project[1]['saved'] %></td>-->
+        <td><strong><%= project[1]['submitted'] %></strong></td>
+      <% end %>
+    </tr>
+  <% end %>
+
+</table>

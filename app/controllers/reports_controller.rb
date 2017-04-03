@@ -95,7 +95,88 @@ class ReportsController < ApplicationController
   def projects
     @breakdown = params[:breakdown]
     @scope = params[:scope]
+    @network = params[:network]
 
+    @projects = Project.all
+
+
+
+
+    @sites = Site.includes(:networks).all
+    @evidence = Evidence.includes(:group, :project).all
+    @groups = Group.includes(:site).all
+
+    group_sites = Hash.new
+    for group in @groups do
+      if group.site
+        include = true
+        if @scope == "network"
+          include = false
+          for network in group.site.networks do
+            puts network.name
+            puts network.id
+            if network.id == @network.to_i
+              include = true
+            end
+          end
+        end
+        if include
+          group_sites[group.id] = group.site.id
+        end
+      end
+    end
+
+    projects_data = Hash.new
+    @project_titles = Hash.new
+    @site_names = Hash.new
+
+    for project in @projects do
+      @project_titles[project.id] = project.title
+    end
+
+    for site in @sites do
+      include = true
+      if @scope == "network"
+        include = false
+        for network in site.networks do
+          if network.id == @network.to_i
+            include = true
+          end
+        end
+      end
+      if include
+        @site_names[site.id] = site.name
+        projects_data[site.id] = Hash.new
+        for project in @projects do
+          projects_data[site.id][project.id] = Hash.new
+          project_data = projects_data[site.id][project.id]
+          project_data['submitted'] = 0
+          project_data['saved'] = 0
+        end
+      end
+    end
+
+    for record in @evidence do
+      if record.status == "submitted" or "saved"
+        if group_sites[record.group_id]
+          #puts record.group_id
+          #puts group_sites[record.group_id]
+          #puts record.project_id
+          #puts record.status
+          projects_data[group_sites[record.group_id]][record.project_id][record.status] += 1;
+        else
+          puts "Record"
+          puts record.id
+          puts "does not have a valid site.\n"
+        end
+      else
+        puts "Record"
+        puts record.id.to_i
+        puts "is not saved or submitted.\n"
+      end
+    end
+
+    @data = projects_data
 
   end
 

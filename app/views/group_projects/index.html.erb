@@ -1,0 +1,35 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Group Projects</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Group</th>
+      <th>Project</th>
+      <th>Order</th>
+      <th>Created at</th>
+      <th>Updated at</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @group_projects.each do |group_project| %>
+      <tr>
+        <td><%= group_project.group_id %></td>
+        <td><%= group_project.project_id %></td>
+        <td><%= group_project.order %></td>
+        <td><%= group_project.created_at %></td>
+        <td><%= group_project.updated_at %></td>
+        <td><%= link_to 'Show', group_project %></td>
+        <td><%= link_to 'Edit', edit_group_project_path(group_project) %></td>
+        <td><%= link_to 'Destroy', group_project, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Group Project', new_group_project_path %>

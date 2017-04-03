@@ -1,0 +1,19 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  label: MyString
+  code: MyString
+  created_by: 1
+  created_at: 2017-04-03 14:05:18
+  updated_at: 2017-04-03 14:05:18
+  license_id: 1
+
+two:
+  name: MyString
+  label: MyString
+  code: MyString
+  created_by: 1
+  created_at: 2017-04-03 14:05:18
+  updated_at: 2017-04-03 14:05:18
+  license_id: 1

@@ -1,0 +1,39 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @network.name %>
+</p>
+
+<p>
+  <strong>Label:</strong>
+  <%= @network.label %>
+</p>
+
+<p>
+  <strong>Code:</strong>
+  <%= @network.code %>
+</p>
+
+<p>
+  <strong>Created by:</strong>
+  <%= @network.created_by %>
+</p>
+
+<p>
+  <strong>Created at:</strong>
+  <%= @network.created_at %>
+</p>
+
+<p>
+  <strong>Updated at:</strong>
+  <%= @network.updated_at %>
+</p>
+
+<p>
+  <strong>License:</strong>
+  <%= @network.license_id %>
+</p>
+
+<%= link_to 'Edit', edit_network_path(@network) %> |
+<%= link_to 'Back', networks_path %>
