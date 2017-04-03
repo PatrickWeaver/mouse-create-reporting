@@ -1,6 +1,6 @@
 class ReportsController < ApplicationController
 
-  def index
+  def accounts
     @breakdown = params[:breakdown]
     @scope = params[:scope]
     case @breakdown
@@ -92,12 +92,11 @@ class ReportsController < ApplicationController
     #@data = "data"
   end
 
-  def accounts
-    if params
-      @users = User.includes(:profile).where("profiles.ethnicity_id" => params[:ethnicity].to_i)
-    else
-      @users = User.all
-    end
+  def projects
+    @breakdown = params[:breakdown]
+    @scope = params[:scope]
+
+
   end
 
   def ethnicity

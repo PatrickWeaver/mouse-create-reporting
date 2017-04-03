@@ -1,30 +1,75 @@
-<h1>Accounts</h1>
-<br />
+<h1>Reports</h1>
 
-<h3>Date Created</h3>
-<label>After:</label>
-<input type="text" class="datepicker">
-<label>Before:</label>
-<input type="text" class="datepicker">
+<h2>Data broken down by <%= @breakdown %></h2>
 
-
-<h3>Ethnicity</h3>
-<select name="cars" multiple class="multi-select">
-  <option value="1">American Indian or Alaska Native</option>
-  <option value="2">Asian</option>
-  <option value="3">Black or African American</option>
-  <option value="4">Hispanic, Latino/a, or Spanish Origin</option>
-  <option value="9">Middle Eastern or North African</option>
-  <option value="5">Native Hawaiian or Other Pacific Islander</option>
-  <option value="6">White</option>
-  <option value="7">Two or More Races</option>
-  <option value="8">Decline to Answer</option>
-</select>
+<% if @scope %>
+  <h3>Site: <%= @scope %> -- <%= @sites[0].name %></h3>
+<% end %>
 
 
+<table>
+  <tr>
+    <th>Id</th>
+    <th>Name</th>
+    <th>Educator Code</th>
+    <th>Accounts</th>
+    <th>Educators</th>
+    <th>Students</th>
+    <th>General Users</th>
+    <th>Girls</th>
+    <th>Boys</th>
+    <th>Other Gender</th>
+    <th>Evidence Records</th>
+    <th>Evidence Records Saved</th>
+    <th>Evidence Records Submitted</th>
+    <th>Average Collaborators</th>
+  </tr>
+  <% @data.each do |site| %>
+  <tr>
+    <td class="number"><%= site[1]['id'] %></td>
+    <td><%= site[1]['name'] %></td>
+    <td><%= site[1]['Educator Code'] %></td>
+    <td class="number"><%= site[1]['Accounts'] %></td>
+    <% if site[1]['Accounts'] != 0 %>
+      <td class="number"><%= site[1]['Educators'] %></td>
+      <td class="percent hide"><%= (100.00 * site[1]['Educators'] / site[1]['Accounts']).round(2) %>%</td>
+      <td class="number"><%= site[1]['Students'] %></td>
+      <td class="percent hide"><%= (100.00 * site[1]['Students'] / site[1]['Accounts']).round(2) %>%</td>
+      <td class="number"><%= site[1]['General Users'] %></td>
+      <td class="percent hide"><%= (100.00 * site[1]['General Users'] / site[1]['Accounts']).round(2) %>%</td>
+    <% else %>
+      <td class="number"><%= site[1]['Educators'] %></td>
+      <td class="percent hide">0%</td>
+      <td class="number"><%= site[1]['Students'] %></td>
+      <td class="percent hide">0%</td>
+      <td class="number"><%= site[1]['General Users'] %></td>
+      <td class="percent hide">0%</td>
+    <% end %>
+    <% if site[1]['Students'] != 0 %>
+      <td class="number"><%= site[1]['Girls'] %></td>
+      <td class="percent hide"><%= (100.00 * site[1]['Girls'] / site[1]['Students']).round(2) %>%</td>
+      <td class="number"><%= site[1]['Boys'] %></td>
+      <td class="percent hide"><%= (100.00 * site[1]['Boys'] / site[1]['Students']).round(2) %>%</td>
+      <td class="number"><%= site[1]['Other Gender'] %></td>
+      <td class="percent hide"><%= (100.00 * site[1]['Other Gender'] / site[1]['Students']).round(2) %>%</td>
+    <% else %>
+      <td class="number"><%= site[1]['Educators'] %></td>
+      <td class="percent hide">0%</td>
+      <td class="number"><%= site[1]['Students'] %></td>
+      <td class="percent hide">0%</td>
+      <td class="number"><%= site[1]['General Users'] %></td>
+      <td class="percent hide">0%</td>
+    <% end %>
+    <td class="number"><%= site[1]['Evidence Records'] %>
+    <td class="number"><%= site[1]['Evidence Records Saved'] %>
+    <td class="number"><%= site[1]['Evidence Records Submitted'] %>
+    <% if site[1]['Evidence Records Submitted'] != 0 %>
+      <td class="number"><%= (1.0 * site[1]['Collaborators'] / site[1]['Evidence Records Submitted']).round(2) %></td>
+    <% else %>
+      <td class="number">0</td>
+    <% end %>
+  </tr>
 
 
-
-<div class="chart">
-  <canvas id="myChart"></canvas>
-</div>
+  <% end %>
+</table>
