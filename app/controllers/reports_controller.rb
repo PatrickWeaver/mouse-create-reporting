@@ -95,19 +95,18 @@ class ReportsController < ApplicationController
   def projects
     @breakdown = params[:breakdown]
     @scope = params[:scope]
+    puts @scope
     @network = params[:network]
 
     @projects = Project.all
 
-
-
-
     @sites = Site.includes(:networks).all
-    @evidence = Evidence.includes(:group, :project).all
+    @evidence = Evidence.includes(:group, :project, :collaborations).all
     @groups = Group.includes(:site).all
 
     group_sites = Hash.new
     for group in @groups do
+      puts group.name
       if group.site
         include = true
         if @scope == "network"
@@ -152,6 +151,7 @@ class ReportsController < ApplicationController
           project_data = projects_data[site.id][project.id]
           project_data['submitted'] = 0
           project_data['saved'] = 0
+          project_data['collaborations'] = 0
         end
       end
     end
@@ -163,7 +163,13 @@ class ReportsController < ApplicationController
           #puts group_sites[record.group_id]
           #puts record.project_id
           #puts record.status
-          projects_data[group_sites[record.group_id]][record.project_id][record.status] += 1;
+          projects_data[group_sites[record.group_id]][record.project_id][record.status] += 1
+          if record.status == "submitted"
+            projects_data[group_sites[record.group_id]][record.project_id]["collaborations"] += 1
+            for collaborator in record.collaborations do
+              projects_data[group_sites[record.group_id]][record.project_id]["collaborations"] += 1
+            end
+          end
         else
           puts "Record"
           puts record.id

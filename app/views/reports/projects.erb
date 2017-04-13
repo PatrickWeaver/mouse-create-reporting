@@ -6,7 +6,9 @@
   <h3>Site: <%= @scope %> -- <%= @sites[0].name %></h3>
 <% end %>
 <% if @scope  == 'network' %>
-  <h3>Site: <%= @scope %> -- <%= @network %></h3>
+  <h3>Network: <%= @scope %> -- <%= @network %></h3>
+<% else %>
+  <h3>Scope not network</h3>
 <% end %>
 
 <table>
@@ -25,7 +27,8 @@
       <td><strong><%= id %></strong></td>
       <% projects.each do |project| %>
         <!--<td><%= project[1]['saved'] %></td>-->
-        <td><strong><%= project[1]['submitted'] %></strong></td>
+        <!--<td><strong><%= project[1]['submitted'] %></strong></td>-->
+        <td><%= project[1]['saved'] %></td>
       <% end %>
     </tr>
   <% end %>
