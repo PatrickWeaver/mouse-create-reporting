@@ -1,6 +1,94 @@
 class ReportsController < ApplicationController
 
-  def accounts
+
+
+  def demographics
+    @data = Hash.new
+    #@accounts_data = Hash.new
+    @scope = params[:scope]
+    @filter = params[:filter]
+    @id = params[:id]
+
+
+    case @scope
+    when "network"
+      if @filter
+        if @filter == "network"
+          @error = "One Network report not set up yet."
+          return
+        else
+          @error = "When scoped by network you can only filter by network."
+          return
+        end
+      else
+        networks = Network.includes(:sites).all
+        for network in networks do
+          @data[network.id] = Hash.new
+          network_hash = @data[network.id]
+          network_hash["name"] = network.name
+          network_hash["id"] = network.id
+          #if @scope == "site"
+          #  s_hash["Educator Code"] = s.code
+          #end
+          network_hash["Accounts"] = 0
+          network_hash["Students"] = 0
+          network_hash["Educators"] = 0
+          network_hash["General Users"] = 0
+          network_hash["Female"] = 0
+          network_hash["Male"] = 0
+          network_hash["Non-Binary/Third Gender"] = 0
+          network_hash["Prefer to Self-Describe"] = 0
+          network_hash["Prefer Not to Say"] = 0
+          network_hash["Evidence Records"] = 0
+          network_hash["Evidence Records Saved"] = 0
+          network_hash["Evidence Records Submitted"] = 0
+          network_hash["Collaborators"] = 0
+          network_hash["Under 5"] = 0
+          network_hash["5 to 10"] = 0
+          network_hash["11 to 13"] = 0
+          network_hash["14 to 17"] = 0
+          network_hash["18 to 21"] = 0
+          network_hash["Over 21"] = 0
+          network_hash["American Indian or Alaska Native"] = 0
+          network_hash["Asian"] = 0
+          network_hash["Black or African American"] = 0
+          network_hash["Hispanic, Latino/a, or Spanish origin"] = 0
+          network_hash["Native Hawaiian or Other Pacific Islander"] = 0
+          network_hash["White"] = 0
+          network_hash["Two or More Races"] = 0
+          network_hash["Decline to Answer"] = 0
+          network_hash["Middle Eastner or North African"] = 0
+        end
+
+        accounts = User.includes(:profile, :role, :sites).all
+        for account in accounts do
+          for network in networks do
+            account_in_network = false
+            for account_site in account.sites do
+              for network_site in network.sites do
+                if account_site == network_site
+                  account_in_network = true
+                  countAccount(account, @data[network.id])
+                  break
+                end
+              end
+              if account_in_network
+                break
+              end
+            end
+          end
+        end
+
+      end
+    when "site"
+      @error = "Site scope report not set up yet."
+      return
+    when "group"
+      @error = "Group scope report not set up yet."
+    end
+  end
+
+  def accounts2
     @breakdown = params[:breakdown]
     @scope = params[:scope]
     case @breakdown
@@ -26,9 +114,11 @@ class ReportsController < ApplicationController
         site_hash["Students"] = 0
         site_hash["Educators"] = 0
         site_hash["General Users"] = 0
-        site_hash["Girls"] = 0
-        site_hash["Boys"] = 0
-        site_hash["Other Gender"] = 0
+        site_hash["Female"] = 0
+        site_hash["Male"] = 0
+        site_hash["Non-Binary/Third Gender"] = 0
+        site_hash["Prefer to Self-Describe"] = 0
+        site_hash["Prefer Not to Say"] = 0
         site_hash["Evidence Records"] = 0
         site_hash["Evidence Records Saved"] = 0
         site_hash["Evidence Records Submitted"] = 0
@@ -46,21 +136,25 @@ class ReportsController < ApplicationController
                 site_hash["Educators"] += 1
               when "student"
                 site_hash["Students"] += 1
-                case user.profile.gender
-                when "female"
-                  site_hash["Girls"] += 1
-                when "male"
-                  site_hash["Boys"] += 1
-                else
-                  site_hash["Other Gender"] += 1
+                case user.profile.gender_id
+                when 1
+                  site_hash["Female"] += 1
+                when 2
+                  site_hash["Male"] += 1
+                when 3
+                  site_hash["Non-Binary/Third Gender"] += 1
+                when 4
+                  site_hash["Prefer to Self-Describe"] += 1
+                when 5
+                  site_hash["Prefer Not to Say"] += 1
                 end
               when "general"
                 site_hash["General Users"] += 1
               else
               end
             end
-          #end
-        end
+          end
+        #end
         for evidence in user.evidence do
           site = evidence.group.site
           if site
@@ -95,11 +189,8 @@ class ReportsController < ApplicationController
   def projects
     @breakdown = params[:breakdown]
     @scope = params[:scope]
-    puts @scope
     @network = params[:network]
-
     @projects = Project.all
-
     @sites = Site.includes(:networks).all
     @evidence = Evidence.includes(:group, :project, :collaborations).all
     @groups = Group.includes(:site).all
@@ -224,7 +315,71 @@ class ReportsController < ApplicationController
     end
   end
 
+  private
 
+    def countAccount(account, s_hash)
+      year = Time.new.year
+      s_hash["Accounts"] += 1
+      case account.role.name
+      when "educator"
+        s_hash["Educators"] += 1
+      when "student"
+        s_hash["Students"] += 1
+        case account.profile.gender_id
+        when 1
+          s_hash["Female"] += 1
+        when 2
+          s_hash["Male"] += 1
+        when 3
+          s_hash["Non-Binary/Third Gender"] += 1
+        when 4
+          s_hash["Prefer to Self-Describe"] += 1
+        when 5
+          s_hash["Prefer Not to Say"] += 1
+        end
+        if account.profile.birth_date
+          age = year - account.profile.birth_date.year
+          case age
+          when 0..4
+            s_hash["Under 5"] += 1
+          when 5..10
+            s_hash["5 to 10"] += 1
+          when 11..13
+            s_hash["11 to 13"] += 1
+          when 14..17
+            s_hash["14 to 17"] += 1
+          when 18..21
+            s_hash["18 to 21"] += 1
+          when 22..100
+            s_hash["Over 21"] += 1
+          end
+        end
+        if account.profile.ethnicity_id
+          case account.profile.ethnicity_id
+          when 1
+            s_hash["American Indian or Alaska Native"] += 1
+          when 2
+            s_hash["Asian"] += 1
+          when 3
+            s_hash["Black or African American"] += 1
+          when 4
+            s_hash["Hispanic, Latino/a, or Spanish origin"] += 1
+          when 5
+            s_hash["Native Hawaiian or Other Pacific Islander"] += 1
+          when 6
+            s_hash["White"] += 1
+          when 7
+            s_hash["Two or More Races"] += 1
+          when 8
+            s_hash["Decline to Answer"] += 1
+          when 9
+            s_hash["Middle Eastner or North African"] += 1
+          end
+        end
+      when "general"
+        s_hash["General Users"] += 1
+      end
+    end
 
 
 end

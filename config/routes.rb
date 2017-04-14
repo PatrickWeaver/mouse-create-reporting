@@ -18,9 +18,10 @@ Rails.application.routes.draw do
   resources :users
   get 'chart/index'
   get 'chart/data', :defaults => { :format => 'json' }
-  get 'reports/accounts', to: 'reports#accounts'
+  get 'reports/demographics', to: 'reports#demographics'
   get 'reports/projects', to: 'reports#projects'
   get 'reports/ethnicity'
+  get 'reports/test'
 
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

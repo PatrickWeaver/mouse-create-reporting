@@ -34,9 +34,33 @@ th {
   background-color: #AFAFAF;
 }
 
+th.gender {
+  background-color: #AFAF8F;
+}
+
+th.age {
+  background-color: #8FAFAF;
+}
+
+th.ethnicity {
+  background-color: #AF8FAF;
+}
+
 td {
   padding: 3px;
   background-color: #EFEFEF;
+}
+
+td.gender {
+  background-color: #EFEFCF;
+}
+
+td.age {
+  background-color: #CFEFEF;
+}
+
+td.ethnicity {
+  background-color: #EFCFEF;
 }
 
 td.number, td.percent{

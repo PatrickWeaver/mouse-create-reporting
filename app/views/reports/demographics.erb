@@ -1,0 +1,150 @@
+<h1>Reports</h1>
+
+
+<% if @error %>
+  <%= @error %>
+<% else %>
+
+  <% if true %>
+  <% if !@data %>
+    <h3>Pick a scope:</h3>
+    <ul>
+      <li>Platform</li>
+      <li>Network</li>
+      <li>Site</li>
+      <li>Group</li>
+    </ul>
+  <% else %>
+    <h2>Data scoped by <%= @scope %></h2>
+    <% if @filter %>
+      <h3>
+        Filtered by <%= @filter.capitalize %>: <%= @filtered.name %></h3>
+    <% end %>
+
+    <table>
+      <tr>
+        <th>Id</th>
+        <th>Name</th>
+        <% if @scope == "site" %>
+          <th>Educator Code</th>
+        <% end %>
+        <th>Accounts</th>
+        <th>Educators</th>
+        <th>Students</th>
+        <th>General Users</th>
+        <th class="gender">Female</th>
+        <th class="gender">Male</th>
+        <th class="gender">Non-Binary/Third Gender</th>
+        <th class="gender">Prefer to Self-Describe</th>
+        <th class="gender">Prefer Not to Say</th>
+        <th class="age">Under 5</th>
+        <th class="age">5 to 10</th>
+        <th class="age">11 to 13</th>
+        <th class="age">14 to 17</th>
+        <th class="age">18 to 21</th>
+        <th class="age">Over 21</th>
+        <th class="ethnicity">American Indian or Alaska Native</th>
+        <th class="ethnicity">Asian</th>
+        <th class="ethnicity">Black or African American</th>
+        <th class="ethnicity">Hispanic, Latino/a, or Spanish origin</th>
+        <th class="ethnicity">Middle Eastner or North African</th>
+        <th class="ethnicity">Native Hawaiian or Other Pacific Islander</th>
+        <th class="ethnicity">White</th>
+        <th class="ethnicity">Two or More Races</th>
+        <th class="ethnicity">Decline to Answer</th>
+      </tr>
+      <% @data.each do |i| %>
+      <tr>
+        <td class="number"><%= i[1]['id'] %></td>
+        <td><%= i[1]['name'] %></td>
+        <% if @scope == "site" %>
+          <td><%= i[1]['Educator Code'] %></td>
+        <% end %>
+        <td class="number"><%= i[1]['Accounts'] %></td>
+        <% if i[1]['Accounts'] != 0 %>
+          <td class="number"><%= i[1]['Educators'] %></td>
+          <td class="percent hide"><%= (100.00 * i[1]['Educators'] / i[1]['Accounts']).round(2) %>%</td>
+          <td class="number"><%= i[1]['Students'] %></td>
+          <td class="percent hide"><%= (100.00 * i[1]['Students'] / i[1]['Accounts']).round(2) %>%</td>
+          <td class="number"><%= i[1]['General Users'] %></td>
+          <td class="percent hide"><%= (100.00 * i[1]['General Users'] / i[1]['Accounts']).round(2) %>%</td>
+        <% else %>
+          <td class="number"><%= i[1]['Educators'] %></td>
+          <td class="percent hide">0%</td>
+          <td class="number"><%= i[1]['Students'] %></td>
+          <td class="percent hide">0%</td>
+          <td class="number"><%= i[1]['General Users'] %></td>
+          <td class="percent hide">0%</td>
+        <% end %>
+        <% if i[1]['Students'] != 0 %>
+          <td class="number gender"><%= i[1]['Female'] %></td>
+          <td class="percent gender hide"><%= (100.00 * i[1]['Female'] / i[1]['Students']).round(2) %>%</td>
+          <td class="number gender"><%= i[1]['Male'] %></td>
+          <td class="percent gender hide"><%= (100.00 * i[1]['Male'] / i[1]['Students']).round(2) %>%</td>
+          <td class="number gender"><%= i[1]['Non-Binary/Third Gender'] %></td>
+          <td class="percent gender hide"><%= (100.00 * i[1]['Non-Binary/Third Gender'] / i[1]['Students']).round(2) %>%</td>
+          <td class="number gender"><%= i[1]['Prefer to Self-Describe'] %></td>
+          <td class="percent gender hide"><%= (100.00 * i[1]['Prefer to Self-Describe'] / i[1]['Students']).round(2) %>%</td>
+          <td class="number gender"><%= i[1]['Prefer Not to Say'] %></td>
+          <td class="percent gender hide"><%= (100.00 * i[1]['Prefer Not to Say'] / i[1]['Students']).round(2) %>%</td>
+        <% else %>
+          <td class="number gender"></td>
+          <td class="percent gender hide">0%</td>
+          <td class="number gender"></td>
+          <td class="percent gender hide">0%</td>
+          <td class="number gender"></td>
+          <td class="percent gender hide">0%</td>
+          <td class="number gender"></td>
+          <td class="percent gender hide">0%</td>
+          <td class="number gender"></td>
+          <td class="percent gender hide">0%</td>
+        <% end %>
+
+        <td class="number age"><%= i[1]['Under 5'] %></td>
+        <td class="percent age hide"></td>
+        <td class="number age"><%= i[1]['5 to 10'] %></td>
+        <td class="percent age hide"></td>
+        <td class="number age"><%= i[1]['11 to 13'] %></td>
+        <td class="percent age hide"></td>
+        <td class="number age"><%= i[1]['14 to 17'] %></td>
+        <td class="percent age hide"></td>
+        <td class="number age"><%= i[1]['18 to 21'] %></td>
+        <td class="percent age hide"></td>
+        <td class="number age"><%= i[1]['Over 21'] %></td>
+        <td class="percent age hide"></td>
+
+        <td class="number ethnicity"><%= i[1]['American Indian or Alaska Native'] %></td>
+        <td class="percent ethnicity hide"></td>
+        <td class="number ethnicity"><%= i[1]['Asian'] %></td>
+        <td class="percent ethnicity hide"></td>
+        <td class="number ethnicity"><%= i[1]['Black or African American'] %></td>
+        <td class="percent ethnicity hide"></td>
+        <td class="number ethnicity"><%= i[1]['Hispanic, Latino/a, or Spanish origin'] %></td>
+        <td class="percent ethnicity hide"></td>
+        <td class="number ethnicity"><%= i[1]['Middle Eastner or North African'] %></td>
+        <td class="percent ethnicity hide"></td>
+        <td class="number ethnicity"><%= i[1]['Native Hawaiian or Other Pacific Islander'] %></td>
+        <td class="percent ethnicity hide"></td>
+        <td class="number ethnicity"><%= i[1]['White'] %></td>
+        <td class="percent ethnicity hide"></td>
+        <td class="number ethnicity"><%= i[1]['Two or More Races'] %></td>
+        <td class="percent ethnicity hide"></td>
+        <td class="number ethnicity"><%= i[1]['Decline to Answer'] %></td>
+        <td class="percent ethnicity hide"></td>
+      </tr>
+
+
+      <% end %>
+    </table>
+
+
+  <% end %>
+
+
+  <% else %>
+
+
+
+  <% end %>
+
+<% end %>

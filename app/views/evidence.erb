@@ -1,0 +1,86 @@
+<h1>Reports</h1>
+
+<% if @error %>
+  <%= @error %>
+<% else %>
+
+  <% if true %>
+  <% if !@data %>
+    <h3>Pick a scope:</h3>
+    <ul>
+      <li>Platform</li>
+      <li>Network</li>
+      <li>Site</li>
+      <li>Group</li>
+    </ul>
+  <% else %>
+    <h2>Data scoped by <%= @scope %></h2>
+    <% if @filter %>
+      <h3>
+        Filtered by <%= @filter.capitalize %>: <%= @filtered.name %></h3>
+    <% end %>
+
+    <table>
+      <tr>
+        <th>Id</th>
+        <th>Name</th>
+        <% if @scope == "site" %>
+          <th>Educator Code</th>
+        <% end %>
+        <th>Accounts</th>
+        <th>Educators</th>
+        <th>Students</th>
+        <th>General Users</th>
+        <th>Evidence Records</th>
+        <th>Evidence Records Saved</th>
+        <th>Evidence Records Submitted</th>
+        <th>Average Collaborators</th>
+      </tr>
+      <% @data.each do |i| %>
+      <tr>
+        <td class="number"><%= i[1]['id'] %></td>
+        <td><%= i[1]['name'] %></td>
+        <% if @scope == "site" %>
+          <td><%= i[1]['Educator Code'] %></td>
+        <% end %>
+        <td class="number"><%= i[1]['Accounts'] %></td>
+        <% if i[1]['Accounts'] != 0 %>
+          <td class="number"><%= i[1]['Educators'] %></td>
+          <td class="percent hide"><%= (100.00 * i[1]['Educators'] / i[1]['Accounts']).round(2) %>%</td>
+          <td class="number"><%= i[1]['Students'] %></td>
+          <td class="percent hide"><%= (100.00 * i[1]['Students'] / i[1]['Accounts']).round(2) %>%</td>
+          <td class="number"><%= i[1]['General Users'] %></td>
+          <td class="percent hide"><%= (100.00 * i[1]['General Users'] / i[1]['Accounts']).round(2) %>%</td>
+        <% else %>
+          <td class="number"><%= i[1]['Educators'] %></td>
+          <td class="percent hide">0%</td>
+          <td class="number"><%= i[1]['Students'] %></td>
+          <td class="percent hide">0%</td>
+          <td class="number"><%= i[1]['General Users'] %></td>
+          <td class="percent hide">0%</td>
+        <% end %>
+        <td class="number"><%= i[1]['Evidence Records'] %>
+        <td class="number"><%= i[1]['Evidence Records Saved'] %>
+        <td class="number"><%= i[1]['Evidence Records Submitted'] %>
+        <% if i[1]['Evidence Records Submitted'] != 0 %>
+          <td class="number"><%= (1.0 * i[1]['Collaborators'] / i[1]['Evidence Records Submitted']).round(2) %></td>
+        <% else %>
+          <td class="number">0</td>
+        <% end %>
+      </tr>
+
+
+      <% end %>
+    </table>
+
+
+  <% end %>
+
+
+  <% else %>
+
+
+
+  <% end %>
+
+<% end %>
