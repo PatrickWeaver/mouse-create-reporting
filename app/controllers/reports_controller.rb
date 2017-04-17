@@ -65,92 +65,102 @@ class ReportsController < ApplicationController
   def projects
     @breakdown = params[:breakdown]
     @scope = params[:scope]
-    @network = params[:network]
+    @filter = params[:filter]
+    @id = params[:id]
     @projects = Project.all
     @sites = Site.includes(:networks).all
     @evidence = Evidence.includes(:group, :project, :collaborations).all
     @groups = Group.includes(:site).all
 
-    group_sites = Hash.new
-    for group in @groups do
-      puts group.name
-      if group.site
-        include = true
-        if @scope == "network"
-          include = false
-          for network in group.site.networks do
-            puts network.name
-            puts network.id
-            if network.id == @network.to_i
-              include = true
-            end
-          end
-        end
-        if include
-          group_sites[group.id] = group.site.id
-        end
-      end
-    end
+    case @scope
+    when "network", "site"
+      group_s = Hash.new
 
-    projects_data = Hash.new
-    @project_titles = Hash.new
-    @site_names = Hash.new
+      case @scope
+      when "network"
 
-    for project in @projects do
-      @project_titles[project.id] = project.title
-    end
-
-    for site in @sites do
-      include = true
-      if @scope == "network"
-        include = false
-        for network in site.networks do
-          if network.id == @network.to_i
+      when "site"
+        for group in @groups do
+          #puts group.name
+          if group.site
             include = true
-          end
-        end
-      end
-      if include
-        @site_names[site.id] = site.name
-        projects_data[site.id] = Hash.new
-        for project in @projects do
-          projects_data[site.id][project.id] = Hash.new
-          project_data = projects_data[site.id][project.id]
-          project_data['submitted'] = 0
-          project_data['saved'] = 0
-          project_data['collaborations'] = 0
-        end
-      end
-    end
-
-    for record in @evidence do
-      if record.status == "submitted" or "saved"
-        if group_sites[record.group_id]
-          #puts record.group_id
-          #puts group_sites[record.group_id]
-          #puts record.project_id
-          #puts record.status
-          projects_data[group_sites[record.group_id]][record.project_id][record.status] += 1
-          if record.status == "submitted"
-            projects_data[group_sites[record.group_id]][record.project_id]["collaborations"] += 1
-            for collaborator in record.collaborations do
-              projects_data[group_sites[record.group_id]][record.project_id]["collaborations"] += 1
+            case @filter
+            when "network"
+              @filtered = Network.find(@id)
+              include = false
+              for network in group.site.networks do
+                if network.id == @id.to_i
+                  include = true
+                end
+              end
+            when "site"
+              @filtered = Network.find(@id)
+              
+            end
+            if include
+              group_s[group.id] = group.site.id
             end
           end
-        else
-          puts "Record"
-          puts record.id
-          puts "does not have a valid site.\n"
         end
-      else
-        puts "Record"
-        puts record.id.to_i
-        puts "is not saved or submitted.\n"
+
+        projects_data = Hash.new
+        @project_titles = Hash.new
+        @site_names = Hash.new
+
+        for project in @projects do
+          @project_titles[project.id] = project.title
+        end
+
+        for site in @sites do
+          include = true
+          if @filter == "network"
+            include = false
+            for network in site.networks do
+              if network.id == @id.to_i
+                include = true
+              end
+            end
+          end
+          if include
+            @site_names[site.id] = site.name
+            projects_data[site.id] = Hash.new
+            for project in @projects do
+              projects_data[site.id][project.id] = Hash.new
+              project_data = projects_data[site.id][project.id]
+              project_data['submitted'] = 0
+              project_data['saved'] = 0
+              project_data['collaborations'] = 0
+            end
+          end
+        end
+
+        for record in @evidence do
+          if record.status == "submitted" or "saved"
+            if group_s[record.group_id]
+              projects_data[group_s[record.group_id]][record.project_id][record.status] += 1
+              if record.status == "submitted"
+                projects_data[group_s[record.group_id]][record.project_id]["collaborations"] += 1
+                for collaborator in record.collaborations do
+                  projects_data[group_s[record.group_id]][record.project_id]["collaborations"] += 1
+                end
+              end
+            else
+              puts "Record"
+              puts record.id
+              puts "does not have a valid site.\n"
+            end
+          else
+            puts "Record"
+            puts record.id.to_i
+            puts "is not saved or submitted.\n"
+          end
+        end
       end
+    when "group"
+      @error = "Report scoped by group not set up yet."
+      return
     end
-
     @data = projects_data
-
   end
 
   def ethnicity

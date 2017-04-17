@@ -1,36 +1,41 @@
 <h1>Reports</h1>
 
-<h2>Data broken down by <%= @breakdown %></h2>
-
-<% if @scope  == 'site' %>
-  <h3>Site: <%= @scope %> -- <%= @sites[0].name %></h3>
-<% end %>
-<% if @scope  == 'network' %>
-  <h3>Network: <%= @scope %> -- <%= @network %></h3>
+<% if @error %>
+  <%= @error %>
 <% else %>
-  <h3>Scope not network</h3>
-<% end %>
 
-<table>
-  <tr>
-    <th>Site Name</th>
-    <th>Site ID</th>
-    <% for project in @project_titles %>
-      <th colspan="1">
-        <%= project[1] %>
-      </th>
-    <% end %>
-  </tr>
-  <% @data.each_with_index do |(id, projects), index| %>
-    <tr>
-      <td><%= @site_names[id] %></td>
-      <td><strong><%= id %></strong></td>
-      <% projects.each do |project| %>
-        <td class="hide"><%= project[1]['saved'] %></td>
-        <td class="hide"><strong><%= project[1]['submitted'] %></strong></td>
-        <td><%= project[1]['collaborations'] %></td>
-      <% end %>
-    </tr>
+  <h2>Data scoped by: --</h2>
+
+  <% if @filter  == 'site' %>
+    <h3>Filtered by Site: <%= @filtered.name %></h3>
+  <% elsif @filter  == 'network' %>
+    <h3>Filtered by Network: <%= @filtered.name %></h3>
+  <% else %>
+    <h3>Filter not network or site.</h3>
   <% end %>
 
-</table>
+  <table>
+    <tr>
+      <th>Site Name</th>
+      <th>Site ID</th>
+      <% for project in @project_titles %>
+        <th colspan="1">
+          <%= project[1] %>
+        </th>
+      <% end %>
+    </tr>
+    <% @data.each_with_index do |(id, projects), index| %>
+      <tr>
+        <td><%= @site_names[id] %></td>
+        <td><strong><%= id %></strong></td>
+        <% projects.each do |project| %>
+          <td class="hide"><%= project[1]['saved'] %></td>
+          <td class="hide"><strong><%= project[1]['submitted'] %></strong></td>
+          <td><%= project[1]['collaborations'] %></td>
+        <% end %>
+      </tr>
+    <% end %>
+
+  </table>
+
+<% end %>
