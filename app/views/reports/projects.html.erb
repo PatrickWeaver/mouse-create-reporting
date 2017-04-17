@@ -26,9 +26,9 @@
       <td><%= @site_names[id] %></td>
       <td><strong><%= id %></strong></td>
       <% projects.each do |project| %>
-        <!--<td><%= project[1]['saved'] %></td>-->
-        <td><strong><%= project[1]['submitted'] %></strong></td>
-        <!--<td><%= project[1]['collaborations'] %></td>-->
+        <td class="hide"><%= project[1]['saved'] %></td>
+        <td class="hide"><strong><%= project[1]['submitted'] %></strong></td>
+        <td><%= project[1]['collaborations'] %></td>
       <% end %>
     </tr>
   <% end %>

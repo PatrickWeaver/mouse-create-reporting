@@ -5,6 +5,18 @@
 //= require chart.2.5.0
 //= require_tree .
 
+$(document).ready(function(e) {
+  $( "li#scopeNetworkFilterNetworkSingleNetwork > button" ).click(function() {
+    id = $( "li#scopeNetworkFilterNetworkSingleNetwork > input" ).val();
+    $( "li#scopeNetworkFilterNetworkSingleNetwork > p").html(
+      "<a href='/reports/demographics?scope=network&filter=network&id=" + id + "'>Network " + id + "</a>"
+    );
+  });
+});
+
+
+
+
 $( function() {
   $( ".datepicker" ).datepicker({
       showOtherMonths: true,
@@ -27,7 +39,7 @@ $.ajax({
                console.log("SUCCESS!");
            },
            error: function (result) {
-               error();
+               log_error(result);
            }
        });
 
@@ -91,6 +103,6 @@ function draw(data) {
 
 }
 
-function error() {
-    console.log("error")
+function log_error(err) {
+    console.log(err)
 }

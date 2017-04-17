@@ -9,76 +9,25 @@ class ReportsController < ApplicationController
     @filter = params[:filter]
     @id = params[:id]
 
-
     case @scope
     when "network"
       if @filter
         if @filter == "network"
-          @error = "One Network report not set up yet."
-          return
+          #@error = "One Network report not set up yet."
+          #return
+          network = Network.includes(:sites).find(@id)
+          networks = [network]
+          @filtered = network
+          #networks = Hash.new
+          #networks[0] = network
+          populateByNetwork(networks)
         else
           @error = "When scoped by network you can only filter by network."
           return
         end
       else
         networks = Network.includes(:sites).all
-        for network in networks do
-          @data[network.id] = Hash.new
-          network_hash = @data[network.id]
-          network_hash["name"] = network.name
-          network_hash["id"] = network.id
-          #if @scope == "site"
-          #  s_hash["Educator Code"] = s.code
-          #end
-          network_hash["Accounts"] = 0
-          network_hash["Students"] = 0
-          network_hash["Educators"] = 0
-          network_hash["General Users"] = 0
-          network_hash["Female"] = 0
-          network_hash["Male"] = 0
-          network_hash["Non-Binary/Third Gender"] = 0
-          network_hash["Prefer to Self-Describe"] = 0
-          network_hash["Prefer Not to Say"] = 0
-          network_hash["Evidence Records"] = 0
-          network_hash["Evidence Records Saved"] = 0
-          network_hash["Evidence Records Submitted"] = 0
-          network_hash["Collaborators"] = 0
-          network_hash["Under 5"] = 0
-          network_hash["5 to 10"] = 0
-          network_hash["11 to 13"] = 0
-          network_hash["14 to 17"] = 0
-          network_hash["18 to 21"] = 0
-          network_hash["Over 21"] = 0
-          network_hash["American Indian or Alaska Native"] = 0
-          network_hash["Asian"] = 0
-          network_hash["Black or African American"] = 0
-          network_hash["Hispanic, Latino/a, or Spanish origin"] = 0
-          network_hash["Native Hawaiian or Other Pacific Islander"] = 0
-          network_hash["White"] = 0
-          network_hash["Two or More Races"] = 0
-          network_hash["Decline to Answer"] = 0
-          network_hash["Middle Eastner or North African"] = 0
-        end
-
-        accounts = User.includes(:profile, :role, :sites).all
-        for account in accounts do
-          for network in networks do
-            account_in_network = false
-            for account_site in account.sites do
-              for network_site in network.sites do
-                if account_site == network_site
-                  account_in_network = true
-                  countAccount(account, @data[network.id])
-                  break
-                end
-              end
-              if account_in_network
-                break
-              end
-            end
-          end
-        end
-
+        populateByNetwork(networks)
       end
     when "site"
       @error = "Site scope report not set up yet."
@@ -86,104 +35,6 @@ class ReportsController < ApplicationController
     when "group"
       @error = "Group scope report not set up yet."
     end
-  end
-
-  def accounts2
-    @breakdown = params[:breakdown]
-    @scope = params[:scope]
-    case @breakdown
-    when "platform"
-      selected_users = User.includes(:profile, :role, :sites).all
-    when "site"
-      if @scope
-        selected_users = User.includes(:profile, :role, :sites)
-        @sites = Site.where( "id" => @scope)
-      else
-        selected_users = User.includes(:profile, :role, :sites).all
-        @sites = Site.all
-      end
-
-      sites_data = Hash.new
-      for site in @sites do
-        sites_data[site.id] = Hash.new
-        site_hash = sites_data[site.id]
-        site_hash["name"] = site.name
-        site_hash["id"] = site.id
-        site_hash["Educator Code"] = site.code
-        site_hash["Accounts"] = 0
-        site_hash["Students"] = 0
-        site_hash["Educators"] = 0
-        site_hash["General Users"] = 0
-        site_hash["Female"] = 0
-        site_hash["Male"] = 0
-        site_hash["Non-Binary/Third Gender"] = 0
-        site_hash["Prefer to Self-Describe"] = 0
-        site_hash["Prefer Not to Say"] = 0
-        site_hash["Evidence Records"] = 0
-        site_hash["Evidence Records Saved"] = 0
-        site_hash["Evidence Records Submitted"] = 0
-        site_hash["Collaborators"] = 0
-      end
-
-      for user in selected_users do
-        #if user.id % 70 == 0
-          for site in user.sites do
-            if sites_data[site.id]
-              site_hash = sites_data[site.id]
-              site_hash["Accounts"] += 1
-              case user.role.name
-              when "educator"
-                site_hash["Educators"] += 1
-              when "student"
-                site_hash["Students"] += 1
-                case user.profile.gender_id
-                when 1
-                  site_hash["Female"] += 1
-                when 2
-                  site_hash["Male"] += 1
-                when 3
-                  site_hash["Non-Binary/Third Gender"] += 1
-                when 4
-                  site_hash["Prefer to Self-Describe"] += 1
-                when 5
-                  site_hash["Prefer Not to Say"] += 1
-                end
-              when "general"
-                site_hash["General Users"] += 1
-              else
-              end
-            end
-          end
-        #end
-        for evidence in user.evidence do
-          site = evidence.group.site
-          if site
-            site_hash = sites_data[site.id]
-            site_hash["Evidence Records"] += 1
-            if evidence.status == "saved"
-              site_hash["Evidence Records Saved"] += 1
-            elsif evidence.status == "submitted"
-              site_hash["Evidence Records Submitted"] += 1
-            else
-            end
-
-            if evidence.status == "submitted"
-              site_hash["Collaborators"] += 1
-              for collaboration in evidence.collaborations do
-                site_hash["Collaborators"] += 1
-              end
-            end
-          end
-        end
-      end
-
-      @data = sites_data
-
-    else
-      selected_users = User.includes(:profile).all
-
-    end
-    #@data = "data"
   end
 
   def projects
@@ -378,6 +229,68 @@ class ReportsController < ApplicationController
         end
       when "general"
         s_hash["General Users"] += 1
+      end
+    end
+
+    def demographicsHash(scoped)
+      for s in scoped do
+        @data[s.id] = Hash.new
+        s_hash = @data[s.id]
+        s_hash["name"] = s.name
+        s_hash["id"] = s.id
+        if @scope == "site"
+          s_hash["Educator Code"] = s.code
+        end
+        s_hash["Accounts"] = 0
+        s_hash["Students"] = 0
+        s_hash["Educators"] = 0
+        s_hash["General Users"] = 0
+        s_hash["Female"] = 0
+        s_hash["Male"] = 0
+        s_hash["Non-Binary/Third Gender"] = 0
+        s_hash["Prefer to Self-Describe"] = 0
+        s_hash["Prefer Not to Say"] = 0
+        s_hash["Evidence Records"] = 0
+        s_hash["Evidence Records Saved"] = 0
+        s_hash["Evidence Records Submitted"] = 0
+        s_hash["Collaborators"] = 0
+        s_hash["Under 5"] = 0
+        s_hash["5 to 10"] = 0
+        s_hash["11 to 13"] = 0
+        s_hash["14 to 17"] = 0
+        s_hash["18 to 21"] = 0
+        s_hash["Over 21"] = 0
+        s_hash["American Indian or Alaska Native"] = 0
+        s_hash["Asian"] = 0
+        s_hash["Black or African American"] = 0
+        s_hash["Hispanic, Latino/a, or Spanish origin"] = 0
+        s_hash["Native Hawaiian or Other Pacific Islander"] = 0
+        s_hash["White"] = 0
+        s_hash["Two or More Races"] = 0
+        s_hash["Decline to Answer"] = 0
+        s_hash["Middle Eastner or North African"] = 0
+      end
+    end
+
+    def populateByNetwork(networks)
+      demographicsHash(networks)
+      accounts = User.includes(:profile, :role, :sites).all
+      for account in accounts do
+        for network in networks do
+          account_in_network = false
+          for account_site in account.sites do
+            for network_site in network.sites do
+              if account_site == network_site
+                account_in_network = true
+                countAccount(account, @data[network.id])
+                break
+              end
+            end
+            if account_in_network
+              break
+            end
+          end
+        end
       end
     end
 
