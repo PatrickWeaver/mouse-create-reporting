@@ -14,6 +14,24 @@ $(document).ready(function(e) {
   });
 });
 
+$(document).ready(function(e) {
+  $( "li#scopeSiteFilterNetworkSingleNetwork > button" ).click(function() {
+    id = $( "li#scopeSiteFilterNetworkSingleNetwork > input" ).val();
+    $( "li#scopeSiteFilterNetworkSingleNetwork > p").html(
+      "<a href='/reports/demographics?scope=site&filter=network&id=" + id + "'>Network " + id + "</a>"
+    );
+  });
+});
+
+$(document).ready(function(e) {
+  $( "li#scopeSiteFilterSiteSingleSite > button" ).click(function() {
+    id = $( "li#scopeSiteFilterSiteSingleSite > input" ).val();
+    $( "li#scopeSiteFilterSiteSingleSite > p").html(
+      "<a href='/reports/demographics?scope=site&filter=site&id=" + id + "'>Site " + id + "</a>"
+    );
+  });
+});
+
 
 
 

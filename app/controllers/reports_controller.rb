@@ -1,7 +1,5 @@
 class ReportsController < ApplicationController
 
-
-
   def demographics
     @data = Hash.new
     #@accounts_data = Hash.new
@@ -13,25 +11,44 @@ class ReportsController < ApplicationController
     when "network"
       if @filter
         if @filter == "network"
-          #@error = "One Network report not set up yet."
-          #return
-          network = Network.includes(:sites).find(@id)
-          networks = [network]
-          @filtered = network
-          #networks = Hash.new
-          #networks[0] = network
-          populateByNetwork(networks)
+          @filtered = Network.includes(:sites).find(@id)
+          networks = [@filtered]
+          populateByScoped(networks)
         else
           @error = "When scoped by network you can only filter by network."
           return
         end
       else
         networks = Network.includes(:sites).all
-        populateByNetwork(networks)
+        populateByScoped(networks)
       end
     when "site"
-      @error = "Site scope report not set up yet."
-      return
+      if @filter
+        case @filter
+        when "network"
+          sites = Site.includes(:networks).where(:networks => {:id => @id})
+
+          for site in sites do
+            puts ""
+            puts site.inspect
+            puts "Networks:"
+            puts site.networks
+            puts ""
+          end
+          @filtered = Network.find(@id)
+          populateByScoped(sites)
+        when "site"
+          @filtered = Site.find(@id)
+          sites = [@filtered]
+          populateByScoped(sites)
+        else
+          @error = "When scoped by site you can only filter by network and site."
+          return
+        end
+      else
+        sites = Site.all()
+        populateByScoped(sites)
+      end
     when "group"
       @error = "Group scope report not set up yet."
     end
@@ -272,21 +289,28 @@ class ReportsController < ApplicationController
       end
     end
 
-    def populateByNetwork(networks)
-      demographicsHash(networks)
+    def populateByScoped(scoped)
+      demographicsHash(scoped)
       accounts = User.includes(:profile, :role, :sites).all
       for account in accounts do
-        for network in networks do
-          account_in_network = false
+        for s in scoped do
+          account_in_s = false
           for account_site in account.sites do
-            for network_site in network.sites do
-              if account_site == network_site
-                account_in_network = true
-                countAccount(account, @data[network.id])
-                break
+            case @scope
+            when "network"
+              for network_site in s.sites do
+                if account_site == network_site
+                  account_in_s = true
+                  break
+                end
+              end
+            when "site"
+              if account_site == s
+                account_in_s = true
               end
             end
-            if account_in_network
+            if account_in_s
+              countAccount(account, @data[s.id])
               break
             end
           end
