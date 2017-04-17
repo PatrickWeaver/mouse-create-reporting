@@ -13,44 +13,52 @@ class ReportsController < ApplicationController
         if @filter == "network"
           @filtered = Network.includes(:sites).find(@id)
           networks = [@filtered]
-          populateByScoped(networks)
         else
           @error = "When scoped by network you can only filter by network."
           return
         end
       else
         networks = Network.includes(:sites).all
-        populateByScoped(networks)
       end
+      populateByScoped(networks)
     when "site"
       if @filter
         case @filter
         when "network"
           sites = Site.includes(:networks).where(:networks => {:id => @id})
-
-          for site in sites do
-            puts ""
-            puts site.inspect
-            puts "Networks:"
-            puts site.networks
-            puts ""
-          end
           @filtered = Network.find(@id)
-          populateByScoped(sites)
         when "site"
           @filtered = Site.find(@id)
           sites = [@filtered]
-          populateByScoped(sites)
         else
           @error = "When scoped by site you can only filter by network and site."
           return
         end
       else
         sites = Site.all()
-        populateByScoped(sites)
       end
+      populateByScoped(sites)
     when "group"
-      @error = "Group scope report not set up yet."
+      if @filter
+        case @filter
+        when "network"
+          groups = Group.includes(site: :networks).where(:networks => {:id => @id})
+          @filtered = Network.find(@id)
+        when "site"
+          #Post.where(status: 'published', user: User.where(admin: true)).includes(:user)
+          groups = Group.includes(:site).where(site: @id)
+          #groups = Group.includes(:site).where(:site => {:id => @id})
+          @filtered = Site.find(@id)
+          #return
+        when "group"
+          @filtered = Group.find(@id)
+          groups = [@filtered]
+        else
+          @error = "When scoped by gropu you can only filter by network, site and group."
+          return
+        end
+        populateByScoped(groups)
+      end
     end
   end
 
@@ -258,6 +266,9 @@ class ReportsController < ApplicationController
         if @scope == "site"
           s_hash["Educator Code"] = s.code
         end
+        if @scope == "group"
+          s_hash["Site Name"] = s.site.name
+        end
         s_hash["Accounts"] = 0
         s_hash["Students"] = 0
         s_hash["Educators"] = 0
@@ -291,31 +302,52 @@ class ReportsController < ApplicationController
 
     def populateByScoped(scoped)
       demographicsHash(scoped)
-      accounts = User.includes(:profile, :role, :sites).all
+
+      case @scope
+      when "network", "site"
+        accounts = User.includes(:profile, :role, :sites).all
+      when "group"
+        accounts = User.includes(:profile, :role, :groups).all
+      end
+
       for account in accounts do
         for s in scoped do
           account_in_s = false
-          for account_site in account.sites do
-            case @scope
-            when "network"
-              for network_site in s.sites do
-                if account_site == network_site
+
+          case @scope
+          when "network", "site"
+            for account_site in account.sites do
+
+              case @scope
+              when "network"
+                for network_site in s.sites do
+                  if account_site == network_site
+                    account_in_s = true
+                    break
+                  end
+                end
+              when "site"
+                if account_site == s
                   account_in_s = true
-                  break
                 end
               end
-            when "site"
-              if account_site == s
-                account_in_s = true
+
+              if account_in_s
+                countAccount(account, @data[s.id])
+                break
               end
             end
-            if account_in_s
-              countAccount(account, @data[s.id])
-              break
+          when "group"
+            for account_grp in account.groups do
+              if account_grp == s
+                countAccount(account, @data[s.id])
+              end
             end
           end
+
         end
       end
+
     end
 
 

@@ -28,6 +28,9 @@
         <% if @scope == "site" %>
           <th>Educator Code</th>
         <% end %>
+        <% if @scope == "group" %>
+          <th>Site Name</th>
+        <% end %>
         <th>Accounts</th>
         <th>Educators</th>
         <th>Students</th>
@@ -59,6 +62,9 @@
         <td><%= i[1]['name'] %></td>
         <% if @scope == "site" %>
           <td><%= i[1]['Educator Code'] %></td>
+        <% end %>
+        <% if @scope == "group" %>
+          <td><%= i[1]['Site Name'] %></td>
         <% end %>
         <td class="number"><%= i[1]['Accounts'] %></td>
         <% if i[1]['Accounts'] != 0 %>
