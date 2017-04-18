@@ -2,7 +2,6 @@ class ReportsController < ApplicationController
 
   def demographics
     @data = Hash.new
-    #@accounts_data = Hash.new
     @scope = params[:scope]
     @filter = params[:filter]
     @id = params[:id]
@@ -63,104 +62,284 @@ class ReportsController < ApplicationController
   end
 
   def projects
-    @breakdown = params[:breakdown]
+    @data = Hash.new
+    # 🚸 Filter evidence query using filter param
+    @evidence = Evidence.includes(:user, :group, :project, :collaborations).all
     @scope = params[:scope]
     @filter = params[:filter]
-    @id = params[:id]
+    @id = params[:id].to_i
+
+    # 🚸 After adding courses change project query to include course info
     @projects = Project.all
-    @sites = Site.includes(:networks).all
-    @evidence = Evidence.includes(:group, :project, :collaborations).all
-    @groups = Group.includes(:site).all
 
-    case @scope
-    when "network", "site"
-      group_s = Hash.new
+    case @filter
+    when "network"
+      @groups = Group.includes(site: :networks).where(:networks => {:id => @id})
+      @filtered = Network.find(@id)
+    when "site"
+      @groups = Group.includes(:site).where(id: @id)
+      @filtered = Site.find(@id)
+    when "group"
+      @filtered = Group.includes(:site).find(@id)
+      @groups = [@filtered]
+    else
+      @groups = Group.includes(:site).all
+    end
 
+    def zeroCategories(hash, net, pro)
+      # Submission by anyone
+      hash["Evidence Submissions"] = 0
+      # Submission by an Educator
+      hash["Educator Evidence Submissions"] = 0
+      # Submission by an Educator, no Student collaborators
+      hash["Educator Only Evidence Submissions"] = 0
+      # Submission by a student
+      hash["Student Evidence Submissions"] = 0
+      # Submission (by a student) or (by an educator with at least one student collaborator)
+      hash["Student Associated Evidence Submissions"] = 0
+      # Any saved evidence
+      hash["Saved Evidence"] = 0
+      # Total Evidence submissions + total collaborators
+      hash["Total Learning Units"] = 0
+      # Total Student Evidence submissions + total Student collaborators
+      hash["Student Learning Units"] = 0
+      # Total Educator Submissions + total Educator collaborators
+      hash["Educator Learning Units"] = 0
+    end
+
+    def countEvidence(ev, hash, nid)
+      # 🚸 Need to account for deleted evidence
+      case ev.status
+      when "submitted"
+        hash["Evidence Submissions"] += 1
+        hash["Total Learning Units"] += 1
+        case ev.user.role.name
+        when "educator", "general"
+          hash["Educator Evidence Submissions"] += 1
+          student_assoc = false
+          if ev.collaborators
+            for c in ev.collaborators do
+              hash["Total Learning Units"] += 1
+              if c.role.name == "student"
+                student_assoc = true
+                hash["Student Learning Units"] += 1
+              elsif c.role.name == "educator" or "general"
+                hash["Educator Learning Units"] += 1
+              end
+            end
+          end
+          if student_assoc
+            hash["Student Associated Evidence Submissions"] += 1
+          else
+            hash["Educator Only Evidence Submissions"] += 1
+          end
+        when "student"
+          hash["Student Evidence Submissions"] += 1
+          hash["Student Associated Evidence Submissions"] += 1
+          if ev.collaborators
+            for c in ev.collaborators do
+              hash["Total Learning Units"] += 1
+              if c.role.name == "student"
+                hash["Student Learning Units"] += 1
+              elsif c.role.name == "educator" or "general"
+                hash["Educator Learning Units"] += 1
+              end
+            end
+          end
+        end
+      when "saved"
+        hash["Saved Evidence"] += 1
+      end
+    end
+
+
+    for pr in @projects do
+      # 🚸 Make this better with queries that take filter into account
       case @scope
       when "network"
-
+        scopes = Network.all
       when "site"
-        for group in @groups do
-          #puts group.name
-          if group.site
-            include = true
-            case @filter
+        scopes = Site.all
+      when "group"
+        scopes = Group.all
+      end
+
+      for s in scopes do
+        @data[s.id] = Hash.new
+        @data[s.id][pr.id] = Hash.new
+        zeroCategories(@data[s.id][pr.id], s.id, pr.id)
+      end
+
+
+      if false
+        for g in @groups do
+          case @scope
+          when "network"
+            if g.site and g.site.networks
+              for n in g.site.networks do
+                @data[n.id] = Hash.new
+                @data[n.id][pr.id] = Hash.new
+                zeroCategories(@data[n.id][pr.id])
+              end
+            end
+          when "site"
+            if g.site
+              @data[g.site.id] = Hash.new
+              @data[g.site.id][e.project_id] = Hash.new
+              zeroCategories(data[g.site.id][pr.id])
+            end
+          when "group"
+            @data[g.id] = Hash.new
+            @data[g.id][e.project_id] = Hash.new
+            zeroCategories(@data[g.id][pr.id])
+          end
+        end
+      end
+    end
+
+    if false
+      for e in @evidence do
+        for g in @groups do
+          if e.group_id == g.id
+            case @scope
             when "network"
-              @filtered = Network.find(@id)
+              if g.site and g.site.networks
+                for n in g.site.networks
+                  countEvidence(e, @data[n.id][e.project_id], n.id)
+                end
+              end
+            when "site"
+              if g.site
+                countEvidence(e, @data[g.site.id][e.project_id])
+              end
+            when "group"
+              countEvidence(e, @data[g.id][e.project_id])
+            else
+            end
+          end
+        end
+      end
+    end
+    if false
+      @sites = Site.includes(:networks).all
+
+      scoped_hash = Hash.new
+
+
+
+      case @scope
+      when "network", "site", "group"
+        for g in @groups
+          count_projects(g)
+        end
+      else
+        @error = "Project reports can only be scoped by Network, Site and Group."
+        return
+      end
+
+
+
+      for project in @projects do
+        @project_titles[project.id] = project.title
+      end
+    end
+    if false
+      case @scope
+      when "network", "site"
+        group_s = Hash.new
+
+        case @scope
+        when "network"
+
+        when "site"
+          for group in @groups do
+            if group.site
+              include = true
+              case @filter
+              when "network"
+                @filtered = Network.find(@id)
+                include = false
+                for network in group.site.networks do
+                  if network.id == @id.to_i
+                    include = true
+                  end
+                end
+              when "site"
+                @filtered = Site.find(@id)
+
+              end
+              if include
+                group_s[group.id] = group.site.id
+              end
+            end
+          end
+
+
+
+
+
+
+          projects_data = Hash.new
+          @project_titles = Hash.new
+          @site_names = Hash.new
+
+          for project in @projects do
+            @project_titles[project.id] = project.title
+          end
+
+          for site in @sites do
+            include = true
+            if @filter == "network"
               include = false
-              for network in group.site.networks do
+              for network in site.networks do
                 if network.id == @id.to_i
                   include = true
                 end
               end
-            when "site"
-              @filtered = Network.find(@id)
-              
             end
             if include
-              group_s[group.id] = group.site.id
-            end
-          end
-        end
-
-        projects_data = Hash.new
-        @project_titles = Hash.new
-        @site_names = Hash.new
-
-        for project in @projects do
-          @project_titles[project.id] = project.title
-        end
-
-        for site in @sites do
-          include = true
-          if @filter == "network"
-            include = false
-            for network in site.networks do
-              if network.id == @id.to_i
-                include = true
+              @site_names[site.id] = site.name
+              projects_data[site.id] = Hash.new
+              for project in @projects do
+                projects_data[site.id][project.id] = Hash.new
+                project_data = projects_data[site.id][project.id]
+                project_data['submitted'] = 0
+                project_data['saved'] = 0
+                project_data['collaborations'] = 0
               end
             end
           end
-          if include
-            @site_names[site.id] = site.name
-            projects_data[site.id] = Hash.new
-            for project in @projects do
-              projects_data[site.id][project.id] = Hash.new
-              project_data = projects_data[site.id][project.id]
-              project_data['submitted'] = 0
-              project_data['saved'] = 0
-              project_data['collaborations'] = 0
-            end
-          end
-        end
 
-        for record in @evidence do
-          if record.status == "submitted" or "saved"
-            if group_s[record.group_id]
-              projects_data[group_s[record.group_id]][record.project_id][record.status] += 1
-              if record.status == "submitted"
-                projects_data[group_s[record.group_id]][record.project_id]["collaborations"] += 1
-                for collaborator in record.collaborations do
+          for record in @evidence do
+            if record.status == "submitted" or "saved"
+              if group_s[record.group_id]
+                projects_data[group_s[record.group_id]][record.project_id][record.status] += 1
+                if record.status == "submitted"
                   projects_data[group_s[record.group_id]][record.project_id]["collaborations"] += 1
+                  for collaborator in record.collaborations do
+                    projects_data[group_s[record.group_id]][record.project_id]["collaborations"] += 1
+                  end
                 end
+              else
+                puts "Record"
+                puts record.id
+                puts "does not have a valid site.\n"
               end
             else
               puts "Record"
-              puts record.id
-              puts "does not have a valid site.\n"
+              puts record.id.to_i
+              puts "is not saved or submitted.\n"
             end
-          else
-            puts "Record"
-            puts record.id.to_i
-            puts "is not saved or submitted.\n"
           end
         end
+      when "group"
+        @error = "Report scoped by group not set up yet."
+        return
       end
-    when "group"
-      @error = "Report scoped by group not set up yet."
-      return
+      @data = projects_data
     end
-    @data = projects_data
+    puts "DATA:"
+    puts @data
   end
 
   def ethnicity
@@ -357,6 +536,15 @@ class ReportsController < ApplicationController
 
         end
       end
+
+    end
+
+    def countProjects(g)
+      for e in @evidence
+
+
+      end
+
 
     end
 
