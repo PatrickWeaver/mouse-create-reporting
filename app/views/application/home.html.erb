@@ -1,6 +1,40 @@
 <h1>Mouse Create Reporting</h1>
+<div id="demographics">
+  <h2>Demographics:</h2>
 
-<h2>Demographics:</h2>
+  <p>
+    Demographics for
+    &ensp;
+    <select class="sel-number">
+      <option value="all">all</option>
+      <option value="one">one</option>
+    </select>
+    &ensp;
+    <select class="sel-scope">
+      <option value="network">Networks</option>
+      <option value="site">Sites</option>
+      <option value="group">Groups</option>
+    </select>
+    &ensp;
+    <span class="filter hide">
+      filtered by
+      &ensp;
+      <select class="sel-filter">
+      </select>
+      &ensp;
+    </span>
+    <span class="id hide">
+      with Id
+      &ensp;
+      <input class="in-id">
+      </input>
+    </span>
+    <button class="create-link">Create Link</button>
+  </p>
+  <p id=link></p>
+</div>
+
+<!--
 <ul id="demographics">
   <li>
     <h3>By Network:</h3>
@@ -54,6 +88,8 @@
     </ul>
   </li>
 </ul>
+
+-->
 
 <h2>Projects</h2>
 <ul id="projects">
