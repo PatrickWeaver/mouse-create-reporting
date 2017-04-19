@@ -34,100 +34,38 @@
   <p id=link></p>
 </div>
 
-<!--
-<ul id="demographics">
-  <li>
-    <h3>By Network:</h3>
-    <ul>
-      <li><h4><a href="/reports/demographics?scope=network">All Networks</a></h4></li>
-      <li id="scopeNetworkFilterNetworkSingleNetwork">
-        <h4>Single Network</h4>
-        <label>Network Id:</label>
-        <input></input><button>Create Link</button><br>
-        <div class="report-link"></div>
-      </li>
-    </ul>
-  </li>
-  <li>
-    <h3>By Site:</h3>
-    <ul>
-      <li><h4><a href="/reports/demographics?scope=site">All Sites</a></h4></li>
-      <li id="scopeSiteFilterNetworkSingleNetwork">
-        <h4>Filtered by Network</h4>
-        <label>Network Id:</label>
-        <input></input><button>Create Link</button><br>
-        <div class="report-link"><div>
-      </li>
-      <li id="scopeSiteFilterSiteSingleSite">
-        <h4>Filtered by Site</h4>
-        <label>Site Id:</label>
-        <input></input><button>Create Link</button><br>
-        <div class="report-link"></div>
-      </li>
-    </ul>
-  </li>
-  <li>
-    <h3>By Group:</h3>
-    <ul>
-      <li><h4><a href="/reports/demographics?scope=group">All Groups</a></h4></li>
-      <li id="scopeGroupFilterNetworkSingleNetwork">
-        <h4>Filtered by Network</h4>
-        <input></input><button>Create Link</button><br>
-        <div class="report-link"></div>
-      </li>
-      <li id="scopeGroupFilterSiteSingleSite">
-        <h4>Filtered by Site</h4>
-        <input></input><button>Create Link</button><br>
-        <div class="report-link"></div>
-      </li>
-      <li id="scopeGroupFilterGroupSingleGroup">
-        <h4>Filtered by Group</h4>
-        <input></input><button>Create Link</button><br>
-        <div class="report-link"></div>
-      </li>
-    </ul>
-  </li>
-</ul>
 
--->
+<div id="projects">
+  <h2>Projects:</h2>
 
-<h2>Projects</h2>
-<ul id="projects">
-  <!--<li>
-    <h3>By Network:</h3>
-    <ul>
-      <li>
-      </li>
-    </ul>
-  </li>-->
-  <li>
-    <h3>By Site:</h3>
-    <ul>
-      <li>
-        <h4><a href="/reports/projects?scope=site">All Sites</h4>
-      </li>
-      <li id="scopeSiteFilterNetworkSingleNetwork">
-        <h4>Filtered by Network</h4>
-        <input></input><button>Create Link</button><br>
-        <div class="report-link"></div>
-      </li>
-      <li id="scopeSiteFilterSiteSingleSite">
-        <h4>Filtered by Site</h4>
-        <input></input><button>Create Link</button><br>
-        <div class="report-link"></div>
-      </li>
-      <li id="scopeSiteFilterGroupSingleGroup">
-        <h4>Filtered by Group</h4>
-        <input></input><button>Create Link</button><br>
-        <div class="report-link"></div>
-      </li>
-    </ul>
-  </li>
-  <!--<li>
-    <h3>By Group:</h3>
-    <ul>
-      <li>
-      </li>
-    </ul>
-  </li>-->
-</ul>
+  <p>
+    Projects submitted by
+    &ensp;
+    <select class="sel-number">
+      <option value="all">all</option>
+      <option value="one">one</option>
+    </select>
+    &ensp;
+    <select class="sel-scope">
+      <option value="network">Networks</option>
+      <option value="site">Sites</option>
+      <option value="group">Groups</option>
+    </select>
+    &ensp;
+    <span class="filter hide">
+      filtered by
+      &ensp;
+      <select class="sel-filter">
+      </select>
+      &ensp;
+    </span>
+    <span class="id hide">
+      with Id
+      &ensp;
+      <input type="text" maxlength="4" size="4" class="in-id">
+      </input>
+    </span>
+    <button class="create-link">Create Link</button>
+  </p>
+  <p id=link></p>
+</div>
