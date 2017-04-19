@@ -84,6 +84,7 @@ class ReportsController < ApplicationController
       @groups = Group.includes(site: :networks).where(:networks => {:id => @id})
       @filtered = Network.find(@id)
     when "site"
+      # 🚸
       @groups = Group.includes(:site).where(id: @id)
       @filtered = Site.find(@id)
     when "group"
@@ -96,25 +97,39 @@ class ReportsController < ApplicationController
     # 🚸 Make this better with queries that take filter into account
     case @scope
     when "network"
-      scopes = Network.all
+      case @filter
+      when "network"
+        scopes = [Network.find(@id)]
+      else
+        scopes = Network.all
+      end
     when "site"
-      scopes = Site.all
+      case @filter
+      when "network"
+        scopes = Site.includes(:networks).where(:networks => {:id => @id})
+      when "site"
+        scopes = [Site.find(@id)]
+      else
+        scopes = Site.all
+      end
     when "group"
-      scopes = Group.all
+      case @filter
+      when "network"
+        scopes = Group.includes(site: :networks).where(:networks => {:id => @id})
+      when "site"
+        # 🚸
+        scopes = Group.includes(:site).where(id: @id)
+      when "group"
+        scopes = [Group.find(@id)]
+      else
+        scopes = Group.all
+      end
     end
 
     for s in scopes do
       @data[s.id] = Hash.new
-      if @filter
-        if s.id == @id
-          @scope_names[s.id] = s.name
-        end
-      end
+      @scope_names[s.id] = s.name
     end
-
-    puts "1 1 1 1 1 1 1 1 1 "
-    puts @groups
-
 
     def zeroCategories(hash)
       # Submission by anyone
@@ -188,28 +203,63 @@ class ReportsController < ApplicationController
         @data[s.id][pr.id] = Hash.new
         zeroCategories(@data[s.id][pr.id])
       end
-      #puts "DATA DATA DATA DATA "
-      #puts @data
     end
+    puts "DATA STARTS HERE:"
+    puts @data
 
     for e in @evidence do
+      site = e.group.site
       case @scope
       when "network"
-        site = e.group.site
         if site and site.networks
           for n in site.networks
             countEvidence(e, @data[n.id][e.project_id])
           end
         end
       when "site"
-
+        if site
+          if @filter
+            case @filter
+            when "network"
+              for n in site.networks
+                if n.id == @id
+                  countEvidence(e, @data[site.id][e.project_id])
+                end
+              end
+            when "site"
+              if site.id == @id
+                countEvidence(e, @data[site.id][e.project_id])
+              end
+            end
+          else
+            countEvidence(e, @data[site.id][e.project_id])
+          end
+        end
       when "group"
-
+        if site
+          if @filter
+            case @filter
+            when "network"
+              for n in site.networks
+                if n.id == @id
+                  countEvidence(e, @data[e.group.id][e.project_id])
+                end
+              end
+            when "site"
+              if site.id == @id
+                countEvidence(e, @data[e.group.id][e.project_id])
+              end
+            when "group"
+              if e.group.id == @id
+                countEvidence(e, @data[e.group.id][e.project_id])
+              end
+            end
+          else
+            countEvidence(e, @data[e.group.id][e.project_id])
+          end
+        end
       end
     end
-
-    puts "DATA DATA DATA DATA "
-    puts @data
 
 
     if false
@@ -225,6 +275,7 @@ class ReportsController < ApplicationController
               end
             when "site"
               if g.site
+
                 countEvidence(e, @data[g.site.id][e.project_id])
               end
             when "group"

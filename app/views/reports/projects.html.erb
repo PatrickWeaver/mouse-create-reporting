@@ -29,9 +29,7 @@
         <td><%= @scope_names[id] %></td>
         <td><strong><%= id %></strong></td>
         <% projects.each do |project| %>
-          <td class="hide"><%= project[1]['saved'] %></td>
-          <td class="hide"><strong><%= project[1]['submitted'] %></strong></td>
-          <td><%= project[1]["Student Learning Units"] %></td>
+          <td title="Evidence Submissions"><%= project[1]["Evidence Submissions"] %></td>
         <% end %>
       </tr>
     <% end %>
