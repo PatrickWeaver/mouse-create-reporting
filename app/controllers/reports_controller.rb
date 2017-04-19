@@ -81,17 +81,12 @@ class ReportsController < ApplicationController
 
     case @filter
     when "network"
-      @groups = Group.includes(site: :networks).where(:networks => {:id => @id})
       @filtered = Network.find(@id)
     when "site"
-      # 🚸
-      @groups = Group.includes(:site).where(id: @id)
       @filtered = Site.find(@id)
     when "group"
       @filtered = Group.includes(:site).find(@id)
-      @groups = [@filtered]
     else
-      @groups = Group.includes(:site).all
     end
 
     # 🚸 Make this better with queries that take filter into account
@@ -117,8 +112,7 @@ class ReportsController < ApplicationController
       when "network"
         scopes = Group.includes(site: :networks).where(:networks => {:id => @id})
       when "site"
-        # 🚸
-        scopes = Group.includes(:site).where(id: @id)
+        scopes = Group.includes(:site).where(:site_id => @id)
       when "group"
         scopes = [Group.find(@id)]
       else
@@ -204,8 +198,6 @@ class ReportsController < ApplicationController
         zeroCategories(@data[s.id][pr.id])
       end
     end
-    puts "DATA STARTS HERE:"
-    puts @data
 
     for e in @evidence do
       site = e.group.site
@@ -213,7 +205,17 @@ class ReportsController < ApplicationController
       when "network"
         if site and site.networks
           for n in site.networks
-            countEvidence(e, @data[n.id][e.project_id])
+            if @filter == "network"
+              if n.id == @id
+                countEvidence(e, @data[n.id][e.project_id])
+              end
+            elsif @filter == "site" or @filter == "group"
+
+              @error = "Cannot filter by site or group with network scope."
+              return
+            else
+              countEvidence(e, @data[n.id][e.project_id])
+            end
           end
         end
       when "site"
@@ -260,152 +262,6 @@ class ReportsController < ApplicationController
         end
       end
     end
-
-
-    if false
-      for e in @evidence do
-        for g in @groups do
-          if e.group_id == g.id
-            case @scope
-            when "network"
-              if g.site and g.site.networks
-                for n in g.site.networks
-                  countEvidence(e, @data[n.id][e.project_id], n.id)
-                end
-              end
-            when "site"
-              if g.site
-
-                countEvidence(e, @data[g.site.id][e.project_id])
-              end
-            when "group"
-              countEvidence(e, @data[g.id][e.project_id])
-            else
-            end
-          end
-        end
-      end
-    end
-    if false
-      @sites = Site.includes(:networks).all
-
-      scoped_hash = Hash.new
-
-
-
-      case @scope
-      when "network", "site", "group"
-        for g in @groups
-          count_projects(g)
-        end
-      else
-        @error = "Project reports can only be scoped by Network, Site and Group."
-        return
-      end
-
-
-
-      for project in @projects do
-        @project_titles[project.id] = project.title
-      end
-    end
-    if false
-      case @scope
-      when "network", "site"
-        group_s = Hash.new
-
-        case @scope
-        when "network"
-
-        when "site"
-          for group in @groups do
-            if group.site
-              include = true
-              case @filter
-              when "network"
-                @filtered = Network.find(@id)
-                include = false
-                for network in group.site.networks do
-                  if network.id == @id.to_i
-                    include = true
-                  end
-                end
-              when "site"
-                @filtered = Site.find(@id)
-
-              end
-              if include
-                group_s[group.id] = group.site.id
-              end
-            end
-          end
-
-
-
-
-
-
-          projects_data = Hash.new
-          @project_titles = Hash.new
-          @site_names = Hash.new
-
-          for project in @projects do
-            @project_titles[project.id] = project.title
-          end
-
-          for site in @sites do
-            include = true
-            if @filter == "network"
-              include = false
-              for network in site.networks do
-                if network.id == @id.to_i
-                  include = true
-                end
-              end
-            end
-            if include
-              @site_names[site.id] = site.name
-              projects_data[site.id] = Hash.new
-              for project in @projects do
-                projects_data[site.id][project.id] = Hash.new
-                project_data = projects_data[site.id][project.id]
-                project_data['submitted'] = 0
-                project_data['saved'] = 0
-                project_data['collaborations'] = 0
-              end
-            end
-          end
-
-          for record in @evidence do
-            if record.status == "submitted" or "saved"
-              if group_s[record.group_id]
-                projects_data[group_s[record.group_id]][record.project_id][record.status] += 1
-                if record.status == "submitted"
-                  projects_data[group_s[record.group_id]][record.project_id]["collaborations"] += 1
-                  for collaborator in record.collaborations do
-                    projects_data[group_s[record.group_id]][record.project_id]["collaborations"] += 1
-                  end
-                end
-              else
-                puts "Record"
-                puts record.id
-                puts "does not have a valid site.\n"
-              end
-            else
-              puts "Record"
-              puts record.id.to_i
-              puts "is not saved or submitted.\n"
-            end
-          end
-        end
-      when "group"
-        @error = "Report scoped by group not set up yet."
-        return
-      end
-      @data = projects_data
-    end
-    #puts "DATA:"
-    #puts @data
   end
 
 
