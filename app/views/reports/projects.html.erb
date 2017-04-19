@@ -26,12 +26,12 @@
     </tr>
     <% @data.each_with_index do |(id, projects), index| %>
       <tr>
-        <td><%= @site_names[id] %></td>
+        <td><%= @scope_names[id] %></td>
         <td><strong><%= id %></strong></td>
         <% projects.each do |project| %>
           <td class="hide"><%= project[1]['saved'] %></td>
           <td class="hide"><strong><%= project[1]['submitted'] %></strong></td>
-          <td><%= project[1]['collaborations'] %></td>
+          <td><%= project[1]["Student Learning Units"] %></td>
         <% end %>
       </tr>
     <% end %>

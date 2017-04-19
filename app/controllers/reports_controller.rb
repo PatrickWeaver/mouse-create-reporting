@@ -64,13 +64,20 @@ class ReportsController < ApplicationController
   def projects
     @data = Hash.new
     # 🚸 Filter evidence query using filter param
-    @evidence = Evidence.includes(:user, :group, :project, :collaborations).all
+    @evidence = Evidence.includes(:user, :group, :project, :collaborators).all
     @scope = params[:scope]
     @filter = params[:filter]
     @id = params[:id].to_i
 
     # 🚸 After adding courses change project query to include course info
     @projects = Project.all
+    @project_titles = Hash.new
+
+    @scope_names = Hash.new
+
+    for project in @projects do
+      @project_titles[project.id] = project.title
+    end
 
     case @filter
     when "network"
@@ -86,7 +93,30 @@ class ReportsController < ApplicationController
       @groups = Group.includes(:site).all
     end
 
-    def zeroCategories(hash, net, pro)
+    # 🚸 Make this better with queries that take filter into account
+    case @scope
+    when "network"
+      scopes = Network.all
+    when "site"
+      scopes = Site.all
+    when "group"
+      scopes = Group.all
+    end
+
+    for s in scopes do
+      @data[s.id] = Hash.new
+      if @filter
+        if s.id == @id
+          @scope_names[s.id] = s.name
+        end
+      end
+    end
+
+    puts "1 1 1 1 1 1 1 1 1 "
+    puts @groups
+
+
+    def zeroCategories(hash)
       # Submission by anyone
       hash["Evidence Submissions"] = 0
       # Submission by an Educator
@@ -107,7 +137,7 @@ class ReportsController < ApplicationController
       hash["Educator Learning Units"] = 0
     end
 
-    def countEvidence(ev, hash, nid)
+    def countEvidence(ev, hash)
       # 🚸 Need to account for deleted evidence
       case ev.status
       when "submitted"
@@ -154,48 +184,33 @@ class ReportsController < ApplicationController
 
 
     for pr in @projects do
-      # 🚸 Make this better with queries that take filter into account
+      for s in scopes do
+        @data[s.id][pr.id] = Hash.new
+        zeroCategories(@data[s.id][pr.id])
+      end
+      #puts "DATA DATA DATA DATA "
+      #puts @data
+    end
+
+    for e in @evidence do
       case @scope
       when "network"
-        scopes = Network.all
-      when "site"
-        scopes = Site.all
-      when "group"
-        scopes = Group.all
-      end
-
-      for s in scopes do
-        @data[s.id] = Hash.new
-        @data[s.id][pr.id] = Hash.new
-        zeroCategories(@data[s.id][pr.id], s.id, pr.id)
-      end
-
-
-      if false
-        for g in @groups do
-          case @scope
-          when "network"
-            if g.site and g.site.networks
-              for n in g.site.networks do
-                @data[n.id] = Hash.new
-                @data[n.id][pr.id] = Hash.new
-                zeroCategories(@data[n.id][pr.id])
-              end
-            end
-          when "site"
-            if g.site
-              @data[g.site.id] = Hash.new
-              @data[g.site.id][e.project_id] = Hash.new
-              zeroCategories(data[g.site.id][pr.id])
-            end
-          when "group"
-            @data[g.id] = Hash.new
-            @data[g.id][e.project_id] = Hash.new
-            zeroCategories(@data[g.id][pr.id])
+        site = e.group.site
+        if site and site.networks
+          for n in site.networks
+            countEvidence(e, @data[n.id][e.project_id])
           end
         end
+      when "site"
+
+      when "group"
+
       end
     end
+
+    puts "DATA DATA DATA DATA "
+    puts @data
+
 
     if false
       for e in @evidence do
@@ -338,9 +353,10 @@ class ReportsController < ApplicationController
       end
       @data = projects_data
     end
-    puts "DATA:"
-    puts @data
+    #puts "DATA:"
+    #puts @data
   end
+
 
   def ethnicity
     if params[:breakdown] == "platform"

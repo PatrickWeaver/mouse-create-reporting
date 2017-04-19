@@ -4,5 +4,5 @@ class Evidence < ApplicationRecord
   belongs_to :group
   belongs_to :project
   has_many :collaborations
-  has_many :collaborators, through: :collaborations, foreign_key: :user_id
+  has_many :collaborators, through: :collaborations, :source => :user
 end
