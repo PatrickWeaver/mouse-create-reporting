@@ -108,77 +108,77 @@ $(document).ready(function(e) {
   });
 
 
-  var sel_number = $( "div#projects > p > select.sel-number" );
-  var sel_scope = $( "div#projects > p > select.sel-scope" );
-  var div_id = $( "div#projects > p > span.id" );
-  var div_filter = $( "div#projects > p > span.filter" );
-  var sel_filter = $( "div#projects > p > span > select.sel-filter" );
-  var in_id = $( "div#projects > p > span > input.in-id" );
-  var demog_link_but = $( "div#projects > p > button.create-link");
-  var new_link = $( "div#projects > p#link");
+  var p_sel_number = $( "div#projects > p > select.sel-number" );
+  var p_sel_scope = $( "div#projects > p > select.sel-scope" );
+  var p_div_id = $( "div#projects > p > span.id" );
+  var p_div_filter = $( "div#projects > p > span.filter" );
+  var p_sel_filter = $( "div#projects > p > span > select.sel-filter" );
+  var p_in_id = $( "div#projects > p > span > input.in-id" );
+  var p_demog_link_but = $( "div#projects > p > button.create-link");
+  var p_new_link = $( "div#projects > p#link");
 
-  sel_number.change(function(){
-    if (sel_number.val() == "one"){
-      sel_scope.children("option").each(function() {
+  p_sel_number.change(function(){
+    if (p_sel_number.val() == "one"){
+      p_sel_scope.children("option").each(function() {
         $(this).html($(this).html().slice(0, -1));
       });
-      div_id.show();
-      sel_filter.val("");
-      div_filter.hide();
-    } else if (sel_number.val() === "all"){
-      sel_scope.children("option").each(function() {
+      p_div_id.show();
+      p_sel_filter.val("");
+      p_div_filter.hide();
+    } else if (p_sel_number.val() === "all"){
+      p_sel_scope.children("option").each(function() {
         $(this).html(String($(this).html()) + "s");
       });
-      div_id.hide();
-      in_id.val("");
+      p_div_id.hide();
+      p_in_id.val("");
     }
   });
 
-  sel_scope.change(function(){
-    if (sel_number.val() === "all" && sel_scope.val() === "site"){
-      div_filter.show();
-      sel_filter.html("<option value=''>all</option><option value='network'>Network</option>");
-    } else if (sel_number.val() === "all" && sel_scope.val() === "group"){
-      div_filter.show();
-      sel_filter.html("<option value=''>all</option><option value='network'>Network</option><option value='site'>Site</option>");
-    } else if (sel_scope.val() === "network"){
-      div_filter.hide();
-      sel_filter.html("");
-      div_id.hide();
-      in_id.val("");
+  p_sel_scope.change(function(){
+    if (p_sel_number.val() === "all" && p_sel_scope.val() === "site"){
+      p_div_filter.show();
+      p_sel_filter.html("<option value=''>all</option><option value='network'>Network</option>");
+    } else if (p_sel_number.val() === "all" && p_sel_scope.val() === "group"){
+      p_div_filter.show();
+      p_sel_filter.html("<option value=''>all</option><option value='network'>Network</option><option value='site'>Site</option>");
+    } else if (p_sel_scope.val() === "network"){
+      p_div_filter.hide();
+      p_sel_filter.html("");
+      p_div_id.hide();
+      p_in_id.val("");
     }
   });
 
-  sel_filter.change(function(){
-    if (sel_filter.val() === ""){
-      div_id.hide();
-      in_id.val("");
+  p_sel_filter.change(function(){
+    if (p_sel_filter.val() === ""){
+      p_div_id.hide();
+      p_in_id.val("");
     } else {
-      div_id.show();
+      p_div_id.show();
     }
   });
 
-  demog_link_but.click(function() {
+  p_demog_link_but.click(function() {
     var link = "/reports/projects?";
-    scope = "scope=" + sel_scope.val();
-    switch (sel_scope.val()) {
+    scope = "scope=" + p_sel_scope.val();
+    switch (p_sel_scope.val()) {
       case "network":
-        if (sel_number.val() === "one") {
+        if (p_sel_number.val() === "one") {
           filter = "&filter=network";
-          id = "&id=" + in_id.val();
+          id = "&id=" + p_in_id.val();
         } else {
           filter = "";
           id = "";
         }
       break;
       case "site":
-        if (sel_number.val() === "one") {
+        if (p_sel_number.val() === "one") {
           filter = "&filter=site";
-          id = "&id=" + in_id.val();
+          id = "&id=" + p_in_id.val();
         } else {
-          if (sel_filter.val() === "network"){
+          if (p_sel_filter.val() === "network"){
             filter = "&filter=network";
-            id = "&id=" + in_id.val();
+            id = "&id=" + p_in_id.val();
           } else {
             filter = "";
             id = "";
@@ -186,16 +186,16 @@ $(document).ready(function(e) {
         }
       break;
       case "group":
-      if (sel_number.val() === "one") {
+      if (p_sel_number.val() === "one") {
         filter = "&filter=group";
-        id = "&id=" + in_id.val();
+        id = "&id=" + p_in_id.val();
       } else {
-        if (sel_filter.val() === "network"){
+        if (p_sel_filter.val() === "network"){
           filter = "&filter=network";
-          id = "&id=" + in_id.val();
-        } else if (sel_filter.val() === "site"){
+          id = "&id=" + p_in_id.val();
+        } else if (p_sel_filter.val() === "site"){
           filter = "&filter=site";
-          id = "&id=" + in_id.val();
+          id = "&id=" + p_in_id.val();
         } else {
           filter = "";
           id = "";
@@ -204,7 +204,7 @@ $(document).ready(function(e) {
       break;
     }
     link += scope + filter + id;
-    new_link.html("<a href='" + link + "'>" + link + "</a>");
+    p_new_link.html("<a href='" + link + "'>" + link + "</a>");
   });
 
 
