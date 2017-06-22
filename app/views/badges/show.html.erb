@@ -1,0 +1,44 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Title:</strong>
+  <%= @badge.title %>
+</p>
+
+<p>
+  <strong>Image url:</strong>
+  <%= @badge.image_url %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @badge.description %>
+</p>
+
+<p>
+  <strong>Criteria:</strong>
+  <%= @badge.criteria %>
+</p>
+
+<p>
+  <strong>Data:</strong>
+  <%= @badge.data %>
+</p>
+
+<p>
+  <strong>Created at:</strong>
+  <%= @badge.created_at %>
+</p>
+
+<p>
+  <strong>Updated at:</strong>
+  <%= @badge.updated_at %>
+</p>
+
+<p>
+  <strong>Deleted at:</strong>
+  <%= @badge.deleted_at %>
+</p>
+
+<%= link_to 'Edit', edit_badge_path(@badge) %> |
+<%= link_to 'Back', badges_path %>

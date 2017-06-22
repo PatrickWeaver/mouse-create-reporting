@@ -1,0 +1,33 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Badge Projects</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Badge</th>
+      <th>Project</th>
+      <th>Created at</th>
+      <th>Updated at</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @badge_projects.each do |badge_project| %>
+      <tr>
+        <td><%= badge_project.badge_id %></td>
+        <td><%= badge_project.project_id %></td>
+        <td><%= badge_project.created_at %></td>
+        <td><%= badge_project.updated_at %></td>
+        <td><%= link_to 'Show', badge_project %></td>
+        <td><%= link_to 'Edit', edit_badge_project_path(badge_project) %></td>
+        <td><%= link_to 'Destroy', badge_project, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Badge Project', new_badge_project_path %>

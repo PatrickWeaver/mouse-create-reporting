@@ -1,0 +1,54 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Code:</strong>
+  <%= @badge_user.code %>
+</p>
+
+<p>
+  <strong>Badge:</strong>
+  <%= @badge_user.badge_id %>
+</p>
+
+<p>
+  <strong>User:</strong>
+  <%= @badge_user.user_id %>
+</p>
+
+<p>
+  <strong>Issuer:</strong>
+  <%= @badge_user.issuer_id %>
+</p>
+
+<p>
+  <strong>Awarded:</strong>
+  <%= @badge_user.awarded %>
+</p>
+
+<p>
+  <strong>Evidence:</strong>
+  <%= @badge_user.evidence_id %>
+</p>
+
+<p>
+  <strong>Requirements:</strong>
+  <%= @badge_user.requirements %>
+</p>
+
+<p>
+  <strong>Eligibility dt:</strong>
+  <%= @badge_user.eligibility_dt %>
+</p>
+
+<p>
+  <strong>Created at:</strong>
+  <%= @badge_user.created_at %>
+</p>
+
+<p>
+  <strong>Updated at:</strong>
+  <%= @badge_user.updated_at %>
+</p>
+
+<%= link_to 'Edit', edit_badge_user_path(@badge_user) %> |
+<%= link_to 'Back', badge_users_path %>

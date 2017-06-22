@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  resources :badge_users
+  resources :badge_projects
+  resources :badges
   resources :curriculum_projects
   resources :curriculas
   resources :network_site
@@ -22,6 +25,7 @@ Rails.application.routes.draw do
   get 'chart/data', :defaults => { :format => 'json' }
   get 'reports/demographics', to: 'reports#demographics'
   get 'reports/projects', to: 'reports#projects'
+  get 'reports/badges', to: 'reports#badges'
   get 'reports/ethnicity'
   get 'reports/test'
 

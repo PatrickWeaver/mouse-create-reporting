@@ -69,7 +69,6 @@ class ReportsController < ApplicationController
     @filter = params[:filter]
     @id = params[:id].to_i
 
-    # 🚸 After adding courses change project query to include course info
     @projects = Project.all
     @project_titles = Hash.new
 
@@ -307,6 +306,73 @@ class ReportsController < ApplicationController
       @ethnicities = ethnicities
       @gender = gender
     end
+  end
+
+
+  def badges
+    @data = Hash.new
+    @badges = Badge.includes(:users, :projects).all
+    @scope = params[:scope]
+    @filter = params[:filter]
+    @id = params[:id].to_i
+
+    @scope_names = Hash.new
+
+    case @filter
+    when "network"
+      @filtered = Network.find(@id)
+    when "site"
+      @filtered = Site.find(@id)
+    when "group"
+      @filtered = Group.includes(:site).find(@id)
+    else
+    end
+
+    # 🚸 Make this better with queries that take filter into account
+    case @scope
+    when "network"
+      case @filter
+      when "network"
+        scopes = [Network.find(@id)]
+      else
+        scopes = Network.all
+      end
+    when "site"
+      case @filter
+      when "network"
+        scopes = Site.includes(:networks).where(:networks => {:id => @id})
+      when "site"
+        scopes = [Site.find(@id)]
+      else
+        scopes = Site.all
+      end
+    when "group"
+      case @filter
+      when "network"
+        scopes = Group.includes(site: :networks).where(:networks => {:id => @id})
+      when "site"
+        scopes = Group.includes(:site).where(:site_id => @id)
+      when "group"
+        scopes = [Group.find(@id)]
+      else
+        scopes = Group.all
+      end
+    end
+
+    for s in scopes do
+      @data[s.id] = Hash.new
+      @scope_names[s.id] = s.name
+    end
+
+
+    for b in @badges do
+      for s in scopes do
+        @data[s.id][b.id] = 0;
+        puts b.user.username
+      end
+    end
+
+
   end
 
   private

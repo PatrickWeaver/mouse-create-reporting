@@ -1,0 +1,37 @@
+<%= form_for(badge_project) do |f| %>
+  <% if badge_project.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(badge_project.errors.count, "error") %> prohibited this badge_project from being saved:</h2>
+
+      <ul>
+      <% badge_project.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :badge_id %>
+    <%= f.number_field :badge_id %>
+  </div>
+
+  <div class="field">
+    <%= f.label :project_id %>
+    <%= f.number_field :project_id %>
+  </div>
+
+  <div class="field">
+    <%= f.label :created_at %>
+    <%= f.datetime_select :created_at %>
+  </div>
+
+  <div class="field">
+    <%= f.label :updated_at %>
+    <%= f.datetime_select :updated_at %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

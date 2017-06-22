@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170323212347) do
+ActiveRecord::Schema.define(version: 20170622163213) do
 
   create_table "badge", id: false, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci" do |t|
     t.integer  "id",                        null: false
@@ -32,7 +32,6 @@ ActiveRecord::Schema.define(version: 20170323212347) do
   end
 
   create_table "badge_users", unsigned: true, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci" do |t|
-    t.string   "code",                           null: false
     t.integer  "badge_id",                       null: false, unsigned: true
     t.integer  "user_id",                        null: false, unsigned: true
     t.integer  "issuer_id",                      null: false, unsigned: true
@@ -76,12 +75,11 @@ ActiveRecord::Schema.define(version: 20170323212347) do
   end
 
   create_table "evidence_asset", unsigned: true, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci" do |t|
-    t.integer  "type_id",                               null: false, unsigned: true
-    t.integer  "evidence_id",                           null: false, unsigned: true
+    t.integer  "type_id",                           null: false, unsigned: true
+    t.integer  "evidence_id",                       null: false, unsigned: true
     t.integer  "step_id"
     t.integer  "step_order",  limit: 1
-    t.integer  "order",       limit: 1,     default: 1, null: false
-    t.text     "content",     limit: 65535
+    t.integer  "order",       limit: 1, default: 1, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.index ["evidence_id"], name: "evidence_asset_evidence_id_foreign", using: :btree
@@ -153,11 +151,6 @@ ActiveRecord::Schema.define(version: 20170323212347) do
     t.string   "external_reference_id", null: false
   end
 
-  create_table "migrations", id: false, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci" do |t|
-    t.string  "migration", null: false
-    t.integer "batch",     null: false
-  end
-
   create_table "network_site", primary_key: ["network_id", "site_id"], force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci" do |t|
     t.integer "network_id", null: false, unsigned: true
     t.integer "site_id",    null: false, unsigned: true
@@ -172,14 +165,6 @@ ActiveRecord::Schema.define(version: 20170323212347) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "license_id", null: false
-  end
-
-  create_table "password_resets", id: false, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci" do |t|
-    t.string   "email",                                           null: false
-    t.string   "token",                                           null: false
-    t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
-    t.index ["email"], name: "password_resets_email_index", using: :btree
-    t.index ["token"], name: "password_resets_token_index", using: :btree
   end
 
   create_table "permission_role", primary_key: ["permission_id", "role_id"], force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci" do |t|
@@ -202,16 +187,19 @@ ActiveRecord::Schema.define(version: 20170323212347) do
     t.datetime "updated_at"
   end
 
+  create_table "profile_gender", unsigned: true, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci" do |t|
+    t.string   "code",       limit: 50,             null: false
+    t.string   "name",       limit: 50,             null: false
+    t.integer  "order",      limit: 2,  default: 1, null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "profiles", unsigned: true, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci" do |t|
-    t.integer  "user_id",                  null: false, unsigned: true
-    t.string   "first_name",               null: false
-    t.string   "last_name",                null: false
-    t.string   "avatar",                   null: false
-    t.date     "birth_date",               null: false
-    t.integer  "ethnicity_id",                          unsigned: true
-    t.string   "phone",        limit: 25
-    t.string   "gender",       limit: 6,   null: false
-    t.string   "bio",          limit: 140
+    t.integer  "user_id",      null: false, unsigned: true
+    t.date     "birth_date",   null: false
+    t.integer  "ethnicity_id",              unsigned: true
+    t.integer  "gender_id",                 unsigned: true
     t.datetime "created_at"
     t.datetime "updated_at"
     t.index ["user_id"], name: "profiles_user_id_foreign", using: :btree
@@ -284,34 +272,23 @@ ActiveRecord::Schema.define(version: 20170323212347) do
   end
 
   create_table "uploads", unsigned: true, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci" do |t|
-    t.string   "hash",         limit: 100
-    t.integer  "context_id",               null: false, unsigned: true
-    t.string   "context_type",             null: false
-    t.string   "path"
+    t.string   "context_type",            null: false
     t.string   "mime",         limit: 50
     t.string   "ext",          limit: 4
     t.string   "size",         limit: 12
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.index ["context_id", "context_type"], name: "uploads_context_id_context_type_index", using: :btree
+    t.index ["context_type"], name: "uploads_context_id_context_type_index", using: :btree
   end
 
   create_table "users", unsigned: true, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci" do |t|
-    t.string   "token",          limit: 20
-    t.string   "name",                                         null: false
-    t.string   "username",       limit: 100
-    t.string   "email",                                        null: false
-    t.string   "password",       limit: 60,                    null: false
-    t.text     "credly",         limit: 65535
-    t.datetime "last_login",                                   null: false
-    t.string   "remember_token", limit: 100
-    t.boolean  "tos",                          default: false, null: false
+    t.datetime "last_login",                    null: false
+    t.boolean  "tos",           default: false, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.datetime "verified_at"
-    t.integer  "verified_by",                                               unsigned: true
-    t.integer  "default_group",                                null: false, unsigned: true
-    t.index ["email"], name: "users_email_unique", unique: true, using: :btree
+    t.integer  "verified_by",                                unsigned: true
+    t.integer  "default_group",                 null: false, unsigned: true
   end
 
   add_foreign_key "curriculum_projects", "curricula", column: "curriculum_id", name: "curriculum_projects_curriculum_id_foreign", on_delete: :cascade

@@ -1,0 +1,67 @@
+<%= form_for(badge_user) do |f| %>
+  <% if badge_user.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(badge_user.errors.count, "error") %> prohibited this badge_user from being saved:</h2>
+
+      <ul>
+      <% badge_user.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :code %>
+    <%= f.text_field :code %>
+  </div>
+
+  <div class="field">
+    <%= f.label :badge_id %>
+    <%= f.number_field :badge_id %>
+  </div>
+
+  <div class="field">
+    <%= f.label :user_id %>
+    <%= f.number_field :user_id %>
+  </div>
+
+  <div class="field">
+    <%= f.label :issuer_id %>
+    <%= f.number_field :issuer_id %>
+  </div>
+
+  <div class="field">
+    <%= f.label :awarded %>
+    <%= f.number_field :awarded %>
+  </div>
+
+  <div class="field">
+    <%= f.label :evidence_id %>
+    <%= f.number_field :evidence_id %>
+  </div>
+
+  <div class="field">
+    <%= f.label :requirements %>
+    <%= f.text_field :requirements %>
+  </div>
+
+  <div class="field">
+    <%= f.label :eligibility_dt %>
+    <%= f.datetime_select :eligibility_dt %>
+  </div>
+
+  <div class="field">
+    <%= f.label :created_at %>
+    <%= f.datetime_select :created_at %>
+  </div>
+
+  <div class="field">
+    <%= f.label :updated_at %>
+    <%= f.datetime_select :updated_at %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>
