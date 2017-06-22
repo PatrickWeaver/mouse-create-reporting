@@ -1,0 +1,2 @@
+module CurriculumProjectsHelper
+end

@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Curriculum:</strong>
+  <%= @curriculum_project.curriculum_id %>
+</p>
+
+<p>
+  <strong>Project:</strong>
+  <%= @curriculum_project.project_id %>
+</p>
+
+<p>
+  <strong>Order:</strong>
+  <%= @curriculum_project.order %>
+</p>
+
+<p>
+  <strong>Created at:</strong>
+  <%= @curriculum_project.created_at %>
+</p>
+
+<p>
+  <strong>Updated at:</strong>
+  <%= @curriculum_project.updated_at %>
+</p>
+
+<%= link_to 'Edit', edit_curriculum_project_path(@curriculum_project) %> |
+<%= link_to 'Back', curriculum_projects_path %>

@@ -1,0 +1,35 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Curriculum Projects</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Curriculum</th>
+      <th>Project</th>
+      <th>Order</th>
+      <th>Created at</th>
+      <th>Updated at</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @curriculum_projects.each do |curriculum_project| %>
+      <tr>
+        <td><%= curriculum_project.curriculum_id %></td>
+        <td><%= curriculum_project.project_id %></td>
+        <td><%= curriculum_project.order %></td>
+        <td><%= curriculum_project.created_at %></td>
+        <td><%= curriculum_project.updated_at %></td>
+        <td><%= link_to 'Show', curriculum_project %></td>
+        <td><%= link_to 'Edit', edit_curriculum_project_path(curriculum_project) %></td>
+        <td><%= link_to 'Destroy', curriculum_project, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Curriculum Project', new_curriculum_project_path %>

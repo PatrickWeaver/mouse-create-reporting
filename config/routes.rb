@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  resources :curriculum_projects
+  resources :curriculas
   resources :network_site
   resources :networks
   resources :group_projects

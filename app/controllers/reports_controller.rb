@@ -76,7 +76,13 @@ class ReportsController < ApplicationController
     @scope_names = Hash.new
 
     for project in @projects do
-      @project_titles[project.id] = project.title
+      @project_titles[project.id] = []
+      @project_titles[project.id][0] = project.title
+      if project.curriculas[0]
+        @project_titles[project.id][1] = project.curriculas[0].title
+      else
+        @project_titles[project.id][1] = "-"
+      end
     end
 
     case @filter
