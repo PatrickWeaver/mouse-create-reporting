@@ -408,7 +408,9 @@ class ReportsController < ApplicationController
             end
           end
           if account_in_s
-            @data[s.id][b.id] += 1
+            if u.role.id == 5
+              @data[s.id][b.id] += 1
+            end
           end
         end
       end
