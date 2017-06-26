@@ -1,0 +1,38 @@
+<h1>Reports</h1>
+
+<% if @error %>
+  <%= @error %>
+<% else %>
+
+  <h2>Data scoped by: --</h2>
+
+  <% if @filter  == 'site' %>
+    <h3>Filtered by Site: <%= @filtered.name %></h3>
+  <% elsif @filter  == 'network' %>
+    <h3>Filtered by Network: <%= @filtered.name %></h3>
+  <% else %>
+    <h3>Filter not network or site.</h3>
+  <% end %>
+
+  <table>
+    <tr>
+      <th>Site Name</th>
+      <th>Site ID</th>
+      <% for badge in @badge_names %>
+        <th colspan="1">
+          <%= badge[1] %>
+        </th>
+      <% end %>
+    </tr>
+    <% @data.each_with_index do |(id, badges), index| %>
+      <tr>
+        <td><%= @scope_names[id] %></td>
+        <td><strong><%= id %></strong></td>
+        <% badges.each do |badge| %>
+          <td title="Badges Available/Awarded"><%= badge[1] %></td>
+        <% end %>
+      </tr>
+    <% end %>
+  </table>
+
+<% end %>

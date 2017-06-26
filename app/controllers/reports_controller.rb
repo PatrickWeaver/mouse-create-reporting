@@ -53,7 +53,7 @@ class ReportsController < ApplicationController
           @filtered = Group.find(@id)
           groups = [@filtered]
         else
-          @error = "When scoped by gropu you can only filter by network, site and group."
+          @error = "When scoped by group you can only filter by network, site and group."
           return
         end
         populateByScoped(groups)
@@ -315,8 +315,13 @@ class ReportsController < ApplicationController
     @scope = params[:scope]
     @filter = params[:filter]
     @id = params[:id].to_i
+    @badge_names = Hash.new
 
     @scope_names = Hash.new
+
+    for badge in @badges do
+      @badge_names[badge.id] = badge.title
+    end
 
     case @filter
     when "network"
@@ -368,9 +373,49 @@ class ReportsController < ApplicationController
     for b in @badges do
       for s in scopes do
         @data[s.id][b.id] = 0;
-        puts b.user.username
       end
     end
+
+    for s in scopes do
+      for b in @badges do
+        for u in b.users do
+          account_in_s = false
+
+          case @scope
+          when "network", "site"
+            badgeUser = User.includes(:profile, :role, :sites).find(u.id)
+            for account_site in u.sites do
+              case @scope
+              when "network"
+                for network_site in s.sites do
+                  if account_site == network_site
+                    account_in_s = true
+                    break
+                  end
+                end
+              when "site"
+                if account_site == s
+                  account_in_s = true
+                  break
+                end
+              end
+            end
+          when "group"
+            badgeUser = User.includes(:profile, :role, :groups).find(u.id)
+            for account_grp in u.groups do
+              if account_grp == s
+                account_in_s = true
+              end
+            end
+          end
+          if account_in_s
+            @data[s.id][b.id] += 1
+          end
+        end
+      end
+    end
+
+    puts @data.inspect
 
 
   end
