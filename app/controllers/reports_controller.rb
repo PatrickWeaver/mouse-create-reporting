@@ -383,7 +383,6 @@ class ReportsController < ApplicationController
 
           case @scope
           when "network", "site"
-            badgeUser = User.includes(:profile, :role, :sites).find(u.id)
             for account_site in u.sites do
               case @scope
               when "network"
