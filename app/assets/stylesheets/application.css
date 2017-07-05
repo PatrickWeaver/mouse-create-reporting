@@ -66,3 +66,7 @@ td.ethnicity {
 td.number, td.percent{
   text-align: right;
 }
+
+#evidence-options-list button li {
+  display: inline;
+}

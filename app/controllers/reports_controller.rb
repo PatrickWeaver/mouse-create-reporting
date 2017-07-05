@@ -160,11 +160,14 @@ class ReportsController < ApplicationController
         case ev.user.role.name
         when "educator", "general"
           hash["Educator Evidence Submissions"] += 1
+          hash["Educator Learning Units"] += 1
+          # Start by assuming it is not student associated.
           student_assoc = false
           if ev.collaborators
             for c in ev.collaborators do
               hash["Total Learning Units"] += 1
               if c.role.name == "student"
+                # If any of the collaborators is a student change to be student assocaited.
                 student_assoc = true
                 hash["Student Learning Units"] += 1
               elsif c.role.name == "educator" or "general"
@@ -180,6 +183,7 @@ class ReportsController < ApplicationController
         when "student"
           hash["Student Evidence Submissions"] += 1
           hash["Student Associated Evidence Submissions"] += 1
+          hash["Student Learning Units"] += 1
           if ev.collaborators
             for c in ev.collaborators do
               hash["Total Learning Units"] += 1

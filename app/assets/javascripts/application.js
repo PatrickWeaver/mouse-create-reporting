@@ -8,6 +8,20 @@
 
 $(document).ready(function(e) {
 
+  $( "#evidence-options-list button li").click(function() {
+    $( ".evidence-data").hide();
+    $( "#evidence-options-list button li").css("border", "none");
+    var sType = $( this ).attr("submission-type");
+    var sTypeClass = "." + sType;
+    $( sTypeClass ).show();
+    $( this ).css("border", "2px solid blue");
+    buttonText = $( this ).html();
+    $( "#submission-type-display").html(buttonText);
+  });
+
+
+
+
   var sel_number = $( "div#demographics > p > select.sel-number" );
   var sel_scope = $( "div#demographics > p > select.sel-scope" );
   var div_id = $( "div#demographics > p > span.id" );
@@ -210,70 +224,6 @@ $(document).ready(function(e) {
 
 
 });
-
-
-
-
-
-
-/*
-
-
-  $( "ul#demographics > li > ul > li#scopeNetworkFilterNetworkSingleNetwork > button" ).click(function() {
-    id = $( "ul#demographics > li > ul > li#scopeNetworkFilterNetworkSingleNetwork > input" ).val();
-    $( "ul#demographics > li > ul > li#scopeNetworkFilterNetworkSingleNetwork > div.report-link").html(
-      "<a href='/reports/demographics?scope=network&filter=network&id=" + id + "'>Demographics Report for Network " + id + "</a>"
-    );
-  });
-});
-
-$(document).ready(function(e) {
-  $( "ul#demographics > li > ul > li#scopeSiteFilterNetworkSingleNetwork > button" ).click(function() {
-    id = $( "ul#demographics > li > ul > li#scopeSiteFilterNetworkSingleNetwork > input" ).val();
-    $( "ul#demographics > li > ul > li#scopeSiteFilterNetworkSingleNetwork > div.report-link").html(
-      "<a href='/reports/demographics?scope=site&filter=network&id=" + id + "'>Demographics Report by Site for Network " + id + "</a>"
-    );
-  });
-});
-
-$(document).ready(function(e) {
-  $( "ul#demographics > li > ul > li#scopeSiteFilterSiteSingleSite > button" ).click(function() {
-    id = $( "ul#demographics > li > ul > li#scopeSiteFilterSiteSingleSite > input" ).val();
-    $( "ul#demographics > li > ul > li#scopeSiteFilterSiteSingleSite > div.report-link").html(
-      "<a href='/reports/demographics?scope=site&filter=site&id=" + id + "'>Demographics Report for Site " + id + "</a>"
-    );
-  });
-});
-
-$(document).ready(function(e) {
-  $( "ul#demographics > li > ul > li#scopeGroupFilterNetworkSingleNetwork > button" ).click(function() {
-    id = $( "ul#demographics > li > ul > li#scopeGroupFilterNetworkSingleNetwork > input" ).val();
-    $( "ul#demographics > li > ul > li#scopeGroupFilterNetworkSingleNetwork > div.report-link").html(
-      "<a href='/reports/demographics?scope=group&filter=network&id=" + id + "'>Demographics Report by Group for Network " + id + "</a>"
-    );
-  });
-});
-
-$(document).ready(function(e) {
-  $( "ul#demographics > li > ul > li#scopeGroupFilterSiteSingleSite > button" ).click(function() {
-    id = $( "ul#demographics > li > ul > li#scopeGroupFilterSiteSingleSite > input" ).val();
-    $( "ul#demographics > li > ul > li#scopeGroupFilterSiteSingleSite > div.report-link").html(
-      "<a href='/reports/demographics?scope=group&filter=site&id=" + id + "'>Demographics Report by Group for Site " + id + "</a>"
-    );
-  });
-});
-
-$(document).ready(function(e) {
-  $( "ul#demographics > li > ul > li#scopeGroupFilterGroupSingleGroup > button" ).click(function() {
-    id = $( "ul#demographics > li > ul > li#scopeGroupFilterGroupSingleGroup > input" ).val();
-    $( "ul#demographics > li > ul > li#scopeGroupFilterGroupSingleGroup > div.report-link").html(
-      "<a href='/reports/demographics?scope=group&filter=group&id=" + id + "'>Demographics Report for Group " + id + "</a>"
-    );
-  });
-});
-
-
-*/
 
 $( function() {
   $( ".datepicker" ).datepicker({
