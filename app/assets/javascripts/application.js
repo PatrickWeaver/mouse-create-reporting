@@ -9,7 +9,11 @@
 $(document).ready(function(e) {
 
   $( "#evidence-options-list button li").click(function() {
-    $( ".evidence-data" ).hide();
+    console.log("START");
+    var count = 0;
+    console.log($( ".evidence-data" ).length);
+      //console.log($(this).html());
+    /*
     console.log("Data hidden.");
     $( "#evidence-options-list button li").css("border", "none");
     var sType = $( this ).attr("submission-type");
@@ -17,6 +21,7 @@ $(document).ready(function(e) {
     var sTypeClass = "." + sType;
     var count = 0;
     $( sTypeClass ).each(function() {
+      console.log($(this).html());
       $( this ).show();
       console.log(count);
       count += 1;
@@ -24,6 +29,8 @@ $(document).ready(function(e) {
     $( this ).css("border", "2px solid blue");
     buttonText = $( this ).html();
     $( "#submission-type-display").html(buttonText);
+    */
+    console.log("DONE");
   });
 
 
