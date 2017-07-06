@@ -9,11 +9,18 @@
 $(document).ready(function(e) {
 
   $( "#evidence-options-list button li").click(function() {
-    $( ".evidence-data").hide();
+    $( ".evidence-data" ).hide();
+    console.log("Data hidden.");
     $( "#evidence-options-list button li").css("border", "none");
     var sType = $( this ).attr("submission-type");
+    console.log("get type from button " + stype);
     var sTypeClass = "." + sType;
-    $( sTypeClass ).show();
+    var count = 0;
+    $( sTypeClass ).each(function() {
+      $( this ).show();
+      console.log(count);
+      count += 1;
+    });
     $( this ).css("border", "2px solid blue");
     buttonText = $( this ).html();
     $( "#submission-type-display").html(buttonText);
