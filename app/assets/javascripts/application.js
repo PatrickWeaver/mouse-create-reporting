@@ -8,7 +8,14 @@
 
 $(document).ready(function(e) {
   // Is exceeding call stack
+  var count = 0;
   $( "#evidence-options-list button li").click(function() {
+    console.log("START");
+    $( ".evidence-data" ).each(function(i, obj) {
+      console.log(i);
+    });
+
+    /*
     $( ".evidence-data").hide();
     $( "#evidence-options-list button li").css("border", "none");
     var sType = $( this ).attr("submission-type");
@@ -17,6 +24,7 @@ $(document).ready(function(e) {
     $( this ).css("border", "2px solid blue");
     buttonText = $( this ).html();
     $( "#submission-type-display").html(buttonText);
+    */
   });
 
 

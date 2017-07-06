@@ -68,6 +68,7 @@ class ReportsController < ApplicationController
     @scope = params[:scope]
     @filter = params[:filter]
     @id = params[:id].to_i
+    @dataType = params[:datatype].to_i
 
     @projects = Project.all
     @project_titles = Hash.new
