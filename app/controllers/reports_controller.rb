@@ -134,9 +134,9 @@ class ReportsController < ApplicationController
       # Submission by anyone
       hash["Evidence Submissions"] = 0
       # Submission by an Educator
-      hash["Educator Evidence Submissions"] = 0
+      # hash["Educator Evidence Submissions"] = 0
       # Submission by an Educator, no Student collaborators
-      hash["Educator Only Evidence Submissions"] = 0
+      # hash["Educator Only Evidence Submissions"] = 0
       # Submission by a student
       hash["Student Evidence Submissions"] = 0
       # Submission (by a student) or (by an educator with at least one student collaborator)
@@ -148,7 +148,7 @@ class ReportsController < ApplicationController
       # Total Student Evidence submissions + total Student collaborators
       hash["Student Learning Units"] = 0
       # Total Educator Submissions + total Educator collaborators
-      hash["Educator Learning Units"] = 0
+      # hash["Educator Learning Units"] = 0
     end
 
     def countEvidence(ev, hash)
@@ -159,8 +159,8 @@ class ReportsController < ApplicationController
         hash["Total Learning Units"] += 1
         case ev.user.role.name
         when "educator", "general"
-          hash["Educator Evidence Submissions"] += 1
-          hash["Educator Learning Units"] += 1
+          # hash["Educator Evidence Submissions"] += 1
+          # hash["Educator Learning Units"] += 1
           # Start by assuming it is not student associated.
           student_assoc = false
           if ev.collaborators
@@ -171,14 +171,14 @@ class ReportsController < ApplicationController
                 student_assoc = true
                 hash["Student Learning Units"] += 1
               elsif c.role.name == "educator" or "general"
-                hash["Educator Learning Units"] += 1
+                # hash["Educator Learning Units"] += 1
               end
             end
           end
           if student_assoc
             hash["Student Associated Evidence Submissions"] += 1
           else
-            hash["Educator Only Evidence Submissions"] += 1
+            # hash["Educator Only Evidence Submissions"] += 1
           end
         when "student"
           hash["Student Evidence Submissions"] += 1
@@ -190,7 +190,7 @@ class ReportsController < ApplicationController
               if c.role.name == "student"
                 hash["Student Learning Units"] += 1
               elsif c.role.name == "educator" or "general"
-                hash["Educator Learning Units"] += 1
+                # hash["Educator Learning Units"] += 1
               end
             end
           end
