@@ -7,7 +7,7 @@
 
 
 $(document).ready(function(e) {
-
+  // Is exceeding call stack
   $( "#evidence-options-list button li").click(function() {
     $( ".evidence-data").hide();
     $( "#evidence-options-list button li").css("border", "none");
