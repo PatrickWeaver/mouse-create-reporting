@@ -8,9 +8,6 @@
 
 $(document).ready(function(e) {
 
-  });
-
-
 
 
   var sel_number = $( "div#demographics > p > select.sel-number" );

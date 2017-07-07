@@ -150,6 +150,10 @@ class ReportsController < ApplicationController
       hash["Student Learning Units"] = 0
       # Total Educator Submissions + total Educator collaborators
       hash["Educator Learning Units"] = 0
+      # Student Saved Evidence
+      hash["Student Saved Evidence"] = 0
+      # Educator Saved Evidence
+      hash["Educator Saved Evidence"] = 0
     end
 
     def countEvidence(ev, hash)
@@ -198,6 +202,11 @@ class ReportsController < ApplicationController
         end
       when "saved"
         hash["Saved Evidence"] += 1
+        case ev.user.role.name
+        when "educator", "general"
+          hash["Educator Saved Evidence"] += 1
+        when "student"
+          hash["Student Saved Evidence"] += 1
       end
     end
 

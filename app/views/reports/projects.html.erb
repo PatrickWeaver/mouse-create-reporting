@@ -32,6 +32,10 @@
     <h4><%= @dataType %> -- 8</h4>
   <% elsif @dataType == 9 %>
     <h4><%= @dataType %> -- 9</h4>
+  <% elsif @dataType == 10 %>
+    <h4><%= @dataType %> -- 9</h4>
+  <% elsif @dataType == 11 %>
+    <h4><%= @dataType %> -- 9</h4>
   <% else %>
     <h4><%= @dataType %> -- ??</h4>
   <% end %>
@@ -49,7 +53,10 @@
     <li id="option-total-learning-units" submission-type="total-learning-units">Total Learning Units (Total Evidence submissions + total collaborators)</li><br>
     <li id="option-student-learning-units" submission-type="student-learning-units">Student Learning Units (Total Student Evidence submissions + total Student collaborators)</li><br>
     <li id="option-educator-learning-units" submission-type="educator-learning-units">Educator Learning Units (Total Educator Submissions + total Educator collaborators)</li><br>
-
+    <li id="option-educator-learning-units" submission-type="educator-learning-units">Educator Learning Units (Total Educator Submissions + total Educator collaborators)</li><br>
+    <li id="option-educator-learning-units" submission-type="educator-learning-units">Educator Learning Units (Total Educator Submissions + total Educator collaborators)</li><br>
+    <li id="option-student-saved-evidence" submission-type="student-saved-evidence">Student Saved Evidence</li><br>
+    <li id="option-educator-saved-evidence" submission-type="educator-saved-evidence">Educator Saved Evidence</li><br>
   </ul>
 
   <h2 id="submission-type-display"></h2>
@@ -96,8 +103,12 @@
             <td class="evidence-data student-learning-units" title="Student Learning Units"><%= project[1]["Student Learning Units"] %></td>
           <% elsif @dataType == 9 %>
             <td class="evidence-data educator-learning-units" title="Educator Learning Units"><%= project[1]["Educator Learning Units"] %></td>
+          <% elsif @dataType == 10 %>
+            <td class="evidence-data student-saved-evidence" title="Student Saved Evidence"><%= project[1]["Student Saved Evidence"] %></td>
+          <% elsif @dataType == 11 %>
+            <td class="evidence-data educator-saved-evidence" title="Educator Saved Evidence"><%= project[1]["Educator Saved Evidence"] %></td>
           <% else %>
-            <td class="evidence-data" title="Placeholder"></td>
+            <td class="evidence-data" title="Placeholder">No Datatype</td>
           <% end %>
         <% end %>
       </tr>
