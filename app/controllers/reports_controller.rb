@@ -202,11 +202,14 @@ class ReportsController < ApplicationController
         end
       when "saved"
         hash["Saved Evidence"] += 1
-        case ev.user.role.name
-        when "educator", "general"
-          hash["Educator Saved Evidence"] += 1
-        when "student"
-          hash["Student Saved Evidence"] += 1
+        if ev.user.role
+          case ev.user.role.name
+          when "educator", "general"
+            hash["Educator Saved Evidence"] += 1
+          when "student"
+            hash["Student Saved Evidence"] += 1
+          end
+        end
       end
     end
 
