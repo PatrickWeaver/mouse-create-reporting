@@ -77,26 +77,25 @@
         <td><%= @scope_names[id] %></td>
         <td><strong><%= id %></strong></td>
         <% projects.each do |project| %>
-          <!---->
 
           <% if @dataType == 1 %>
             <td class="evidence-data evidence-submissions" title="Evidence Submissions"><%= project[1]["Evidence Submissions"] %></td>
           <% elsif @dataType == 2 %>
             <td class="evidence-data educator-evidence-submissions" title="Educator Evidence Submissions"><%= project[1]["Educator Evidence Submissions"] %></td>
           <% elsif @dataType == 3 %>
-            <td class="evidence-data hide educator-only-evidence-submissions" title="Educator Only Evidence Submissions"><%= project[1]["Educator Only Evidence Submissions"] %></td>
+            <td class="evidence-data educator-only-evidence-submissions" title="Educator Only Evidence Submissions"><%= project[1]["Educator Only Evidence Submissions"] %></td>
           <% elsif @dataType == 4 %>
-            <td class="evidence-data hide student-evidence-submissions" title="Student Evidence Submissions"><%= project[1]["Student Evidence Submissions"] %></td>
+            <td class="evidence-data student-evidence-submissions" title="Student Evidence Submissions"><%= project[1]["Student Evidence Submissions"] %></td>
           <% elsif @dataType == 5 %>
-            <td class="evidence-data hide student-associated-evidence-submissions" title="Student Associated Evidence Submissions"><%= project[1]["Student Associated Evidence Submissions"] %></td>
+            <td class="evidence-data  student-associated-evidence-submissions" title="Student Associated Evidence Submissions"><%= project[1]["Student Associated Evidence Submissions"] %></td>
           <% elsif @dataType == 6 %>
-            <td class="evidence-data hide saved-evidence" title="Saved Evidence"><%= project[1]["Saved Evidence"] %></td>
+            <td class="evidence-data saved-evidence" title="Saved Evidence"><%= project[1]["Saved Evidence"] %></td>
           <% elsif @dataType == 7 %>
-            <td class="evidence-data hide total-learning-units" title="Total Learning Units"><%= project[1]["Total Learning Units"] %></td>
+            <td class="evidence-data total-learning-units" title="Total Learning Units"><%= project[1]["Total Learning Units"] %></td>
           <% elsif @dataType == 8 %>
-            <td class="evidence-data hide student-learning-units" title="Student Learning Units"><%= project[1]["Student Learning Units"] %></td>
+            <td class="evidence-data student-learning-units" title="Student Learning Units"><%= project[1]["Student Learning Units"] %></td>
           <% elsif @dataType == 9 %>
-            <td class="evidence-data hide educator-learning-units" title="Educator Learning Units"><%= project[1]["Educator Learning Units"] %></td>
+            <td class="evidence-data educator-learning-units" title="Educator Learning Units"><%= project[1]["Educator Learning Units"] %></td>
           <% else %>
             <td class="evidence-data" title="Placeholder"></td>
           <% end %>

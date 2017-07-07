@@ -12,6 +12,7 @@ RUN bundle install
 ADD . /mouseCreateReporting
 WORKDIR /mouseCreateReporting
 RUN RAILS_ENV=production bundle exec rake assets:precompile --trace
+
 EXPOSE 3000
 
 CMD ["rails","server","-b","0.0.0.0"]
